@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>BEAST GYM | نادي اللياقة البدنية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#" data-page="home">
+      <svg width="28" height="28" viewBox="0 0 28 28"><polygon points="14,2 26,8 26,20 14,26 2,20 2,8" fill="none" stroke="#e63946" stroke-width="2"/><text x="14" y="18" text-anchor="middle" fill="#fff" font-size="9" font-weight="900" font-family="sans-serif">BG</text></svg>
+      <span>BEAST<em>GYM</em></span>
+    </a>
+    <ul class="nav-menu" id="navMenu">
+      <li><a class="nav-link active" data-page="home">الرئيسية</a></li>
+      <li><a class="nav-link" data-page="programs">البرامج</a></li>
+      <li><a class="nav-link" data-page="exercises">التمارين</a></li>
+      <li><a class="nav-link" data-page="nutrition">التغذية</a></li>
+      <li><a class="nav-link" data-page="trainers">المدربون</a></li>
+      <li><a class="nav-link" data-page="pricing">الأسعار</a></li>
+      <li><a class="nav-link" data-page="contact">تواصل</a></li>
+    </ul>
+    <a class="nav-cta" data-page="contact">ابدأ الآن</a>
+    <button class="nav-burger" id="navBurger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div id="app">
+
+<!-- =================== HOME =================== -->
+<div class="page active" id="page-home">
+
+  <section class="hero-full">
+    <div class="hero-media">
+      <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80&auto=format&fit=crop" alt="جيم" class="hero-bg-img"/>
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-copy">
+      <div class="hero-eyebrow">⚡ نادي اللياقة الأول في المنطقة</div>
+      <h1 class="hero-headline">
+        <span class="hh-line">لا حدود</span>
+        <span class="hh-line red-stroke">للقوة</span>
+      </h1>
+      <p class="hero-sub">انضم لأكثر من 3000 عضو يتحولون كل يوم. مدربون محترفون، معدات عالمية، نتائج مضمونة.</p>
+      <div class="hero-actions">
+        <button class="btn-fire" data-page="programs">استكشف البرامج</button>
+        <button class="btn-ghost" data-page="contact">جلسة مجانية</button>
+      </div>
+    </div>
+    <div class="hero-stats-bar">
+      <div class="hstat"><span class="hnum" data-count="3000">0</span><span class="hunit">+</span><span class="hlbl">عضو نشط</span></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><span class="hnum" data-count="18">0</span><span class="hunit">+</span><span class="hlbl">مدرب معتمد</span></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><span class="hnum" data-count="200">0</span><span class="hunit">+</span><span class="hlbl">جهاز رياضي</span></div>
+      <div class="hstat-div"></div>
+      <div class="hstat"><span class="hnum" data-count="9">0</span><span class="hunit">سنوات</span><span class="hlbl">من التميز</span></div>
+    </div>
+  </section>
+
+  <!-- SPLIT: WHY US -->
+  <section class="split-sec">
+    <div class="split-img">
+      <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=900&q=80&auto=format&fit=crop" alt="تدريب"/>
+      <div class="split-badge"><span>24/7</span><small>مفتوح دائماً</small></div>
+    </div>
+    <div class="split-txt">
+      <span class="chip">لماذا BEAST GYM؟</span>
+      <h2>ليس مجرد نادي —<br/><span class="red">أسلوب حياة</span></h2>
+      <p>كل شيء في BEAST GYM مصمم لدفعك للحد الأقصى. من أحدث معدات رفع الأثقال، إلى قاعات الكارديو المكيفة، إلى مدربين يتابعونك خطوة بخطوة.</p>
+      <div class="why-grid">
+        <div class="wi"><span class="wi-ic">🏋️</span><div><strong>معدات Iron Grip &amp; Life Fitness</strong><br/><small>أكثر من 200 جهاز بمواصفات عالمية</small></div></div>
+        <div class="wi"><span class="wi-ic">👨‍🏫</span><div><strong>مدربون معتمدون ISSA / NASM</strong><br/><small>خبرة تتراوح بين 5 و15 سنة</small></div></div>
+        <div class="wi"><span class="wi-ic">🥗</span><div><strong>أخصائي تغذية داخل النادي</strong><br/><small>خطط مخصصة لكل عضو</small></div></div>
+        <div class="wi"><span class="wi-ic">📊</span><div><strong>تتبع التقدم أسبوعياً</strong><br/><small>قياسات دقة + تحليل تركيبة الجسم</small></div></div>
+      </div>
+      <button class="btn-fire" data-page="programs">شوف البرامج</button>
+    </div>
+  </section>
+
+  <!-- MASONRY GALLERY -->
+  <section class="mas-sec">
+    <div class="mas-head"><span class="chip">مرافقنا</span><h2>انظر بنفسك</h2></div>
+    <div class="mas-grid">
+      <div class="mi big"><img src="https://images.unsplash.com/photo-1534367610401-9f5ed68180aa?w=900&q=80&auto=format&fit=crop" alt="قاعة أثقال"/><div class="mi-lbl">قاعة الأثقال الرئيسية</div></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80&auto=format&fit=crop" alt="كارديو"/><div class="mi-lbl">قاعة الكارديو</div></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600&q=80&auto=format&fit=crop" alt="تمرين"/><div class="mi-lbl">تدريب شخصي</div></div>
+      <div class="mi tall"><img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=600&q=80&auto=format&fit=crop" alt="رفع أثقال"/><div class="mi-lbl">الحديد الحر</div></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1576678927484-cc907957088c?w=600&q=80&auto=format&fit=crop" alt="مجموعة"/><div class="mi-lbl">فصول جماعية</div></div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS STRIP -->
+  <section class="strip-sec">
+    <div class="strip-head"><span class="chip">برامجنا</span><h2>برنامجك في <span class="red">3 خطوات</span></h2></div>
+    <div class="prog-strip">
+      <div class="ps-card" style="background-image:url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=700&q=80&auto=format&fit=crop')">
+        <div class="ps-ov"></div>
+        <div class="ps-cnt"><div class="ps-num">01</div><h3>بناء العضلات</h3><p>ضخامة حقيقية في 12 أسبوع</p><button class="ps-btn" data-page="programs">تفاصيل</button></div>
+      </div>
+      <div class="ps-card" style="background-image:url('https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=700&q=80&auto=format&fit=crop')">
+        <div class="ps-ov"></div>
+        <div class="ps-cnt"><div class="ps-num">02</div><h3>حرق الدهون</h3><p>تخسيس مدروس بدون خسارة عضلات</p><button class="ps-btn" data-page="programs">تفاصيل</button></div>
+      </div>
+      <div class="ps-card" style="background-image:url('https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?w=700&q=80&auto=format&fit=crop')">
+        <div class="ps-ov"></div>
+        <div class="ps-cnt"><div class="ps-num">03</div><h3>القوة والأداء</h3><p>للرياضيين المتقدمين</p><button class="ps-btn" data-page="programs">تفاصيل</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testi-sec">
+    <span class="chip cc">شهادات الأعضاء</span>
+    <h2 class="ch2">نتائج حقيقية، ناس حقيقيون</h2>
+    <div class="testi-row">
+      <div class="tc"><img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=80&h=80&q=80&auto=format&fit=crop&crop=face" alt="عضو"/><div class="tc-body"><div class="tcs">★★★★★</div><p>"خسرت 22 كيلو في 5 أشهر. المدرب أحمد غيّر حياتي. الأنظمة الغذائية كانت مضبوطة ودقيقة جداً."</p><strong>محمد العلي</strong><small>خسر 22 كيلو · 2023</small></div></div>
+      <div class="tc ftc"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&q=80&auto=format&fit=crop&crop=face" alt="عضو"/><div class="tc-body"><div class="tcs">★★★★★</div><p>"كنت أخشى الجيم، الآن أتمرن 5 أيام بالأسبوع. الجو محفز جداً والمدربين يهتمون فعلاً بكل عضو."</p><strong>نورة السعد</strong><small>كسبت 8 كيلو عضل · 2022</small></div></div>
+      <div class="tc"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&q=80&auto=format&fit=crop&crop=face" alt="عضو"/><div class="tc-body"><div class="tcs">★★★★★</div><p>"أفضل استثمار في حياتي. برنامج رفع الأثقال أضاف 40 كيلو على bench press في 6 أشهر."</p><strong>خالد الحربي</strong><small>باور ليفتر · 2021</small></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- =================== PROGRAMS =================== -->
+<div class="page" id="page-programs">
+  <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1600&q=80&auto=format&fit=crop')">
+    <div class="ph-ov"></div>
+    <div class="ph-cnt"><span class="chip">البرامج التدريبية</span><h1>اختر مسارك</h1><p>برامج مصممة علمياً لكل هدف ولكل مستوى</p></div>
+  </div>
+  <div class="pb">
+    <div class="pd-block">
+      <div class="pd-img"><img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&q=80&auto=format&fit=crop" alt="بناء عضلات"/><div class="pd-badge">الأكثر طلباً 🔥</div></div>
+      <div class="pd-info">
+        <span class="chip">برنامج 01</span><h2>بناء الكتلة العضلية</h2>
+        <div class="pd-meta"><span>⏱ 12 أسبوع</span><span>📅 5 أيام/أسبوع</span><span>📊 متوسط–متقدم</span></div>
+        <p>برنامج هجين يجمع بين الحجم العالي للتضخيم وتمارين القوة الأساسية. مبني على Progressive Overload لضمان نمو مستمر. يبدأ بـ 4×10 ويصل إلى 5×5 في المراحل الأخيرة.</p>
+        <div class="week-plan"><h4>جدول الأسبوع</h4>
+          <div class="wdays">
+            <div class="wd on">السبت<br/><small>صدر + تراي</small></div>
+            <div class="wd on">الأحد<br/><small>ظهر + بايسبس</small></div>
+            <div class="wd on">الاثنين<br/><small>أرجل كامل</small></div>
+            <div class="wd off">الثلاثاء<br/><small>راحة</small></div>
+            <div class="wd on">الأربعاء<br/><small>أكتاف</small></div>
+            <div class="wd on">الخميس<br/><small>تمارين مركبة</small></div>
+            <div class="wd off">الجمعة<br/><small>راحة</small></div>
+          </div>
+        </div>
+        <div class="tgt-bars"><h4>الأهداف المتوقعة</h4>
+          <div class="tg"><div class="tgb" style="--tw:85%"></div><span>زيادة الكتلة العضلية <b>85%</b></span></div>
+          <div class="tg"><div class="tgb" style="--tw:70%"></div><span>زيادة القوة <b>70%</b></span></div>
+          <div class="tg"><div class="tgb" style="--tw:60%"></div><span>تحسين التعريف <b>60%</b></span></div>
+        </div>
+        <button class="btn-fire" data-page="contact">سجل في البرنامج</button>
+      </div>
+    </div>
+    <div class="pd-block rev">
+      <div class="pd-img"><img src="https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800&q=80&auto=format&fit=crop" alt="حرق دهون"/><div class="pd-badge">نتائج سريعة ⚡</div></div>
+      <div class="pd-info">
+        <span class="chip">برنامج 02</span><h2>حرق الدهون والتنحيف</h2>
+        <div class="pd-meta"><span>⏱ 8 أسابيع</span><span>📅 5 أيام/أسبوع</span><span>📊 مبتدئ–متوسط</span></div>
+        <p>دمج ذكي بين تمارين المقاومة وال HIIT لحرق أقصى قدر من الدهون مع الحفاظ على العضلات. العجز الحراري مدروس 500 سعرة/يوم مع 3 أيام كارديو.</p>
+        <div class="week-plan"><h4>جدول الأسبوع</h4>
+          <div class="wdays">
+            <div class="wd on">السبت<br/><small>Upper HIIT</small></div>
+            <div class="wd on">الأحد<br/><small>Lower Strength</small></div>
+            <div class="wd on">الاثنين<br/><small>Cardio 45د</small></div>
+            <div class="wd off">الثلاثاء<br/><small>راحة فعالة</small></div>
+            <div class="wd on">الأربعاء<br/><small>Full Body</small></div>
+            <div class="wd on">الخميس<br/><small>HIIT Sprint</small></div>
+            <div class="wd off">الجمعة<br/><small>راحة</small></div>
+          </div>
+        </div>
+        <div class="tgt-bars"><h4>الأهداف المتوقعة</h4>
+          <div class="tg"><div class="tgb" style="--tw:90%"></div><span>حرق الدهون <b>90%</b></span></div>
+          <div class="tg"><div class="tgb" style="--tw:80%"></div><span>تحسين اللياقة القلبية <b>80%</b></span></div>
+          <div class="tg"><div class="tgb" style="--tw:65%"></div><span>الحفاظ على العضلات <b>65%</b></span></div>
+        </div>
+        <button class="btn-fire" data-page="contact">سجل في البرنامج</button>
+      </div>
+    </div>
+    <div class="pd-block">
+      <div class="pd-img"><img src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?w=800&q=80&auto=format&fit=crop" alt="قوة"/><div class="pd-badge">للمحترفين 💪</div></div>
+      <div class="pd-info">
+        <span class="chip">برنامج 03</span><h2>القوة القصوى والأداء</h2>
+        <div class="pd-meta"><span>⏱ 16 أسبوع</span><span>📅 4 أيام/أسبوع</span><span>📊 متقدم</span></div>
+        <p>مبني على نظام 5/3/1 Wendler مع تعديلات للرياضة التنافسية. يركز على Squat, Deadlift, Bench Press, OHP كحركات أساسية مع حجم إضافي.</p>
+        <div class="week-plan"><h4>جدول الأسبوع</h4>
+          <div class="wdays">
+            <div class="wd on">السبت<br/><small>Deadlift</small></div>
+            <div class="wd off">الأحد<br/><small>راحة</small></div>
+            <div class="wd on">الاثنين<br/><small>Bench Press</small></div>
+            <div class="wd off">الثلاثاء<br/><small>راحة</small></div>
+            <div class="wd on">الأربعاء<br/><small>Squat</small></div>
+            <div class="wd off">الخميس<br/><small>راحة</small></div>
+            <div class="wd on">الجمعة<br/><small>OHP</small></div>
+          </div>
+        </div>
+        <div class="tgt-bars"><h4>الأهداف المتوقعة</h4>
+          <div class="tg"><div class="tgb" style="--tw:95%"></div><span>زيادة القوة <b>95%</b></span></div>
+          <div class="tg"><div class="tgb" style="--tw:75%"></div><span>زيادة الكتلة <b>75%</b></span></div>
+          <div class="tg"><div class="tgb" style="--tw:80%"></div><span>تحسين الأداء <b>80%</b></span></div>
+        </div>
+        <button class="btn-fire" data-page="contact">سجل في البرنامج</button>
+      </div>
+    </div>
+    <div class="pd-block rev">
+      <div class="pd-img"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80&auto=format&fit=crop" alt="نساء"/><div class="pd-badge">للمرأة 👑</div></div>
+      <div class="pd-info">
+        <span class="chip">برنامج 04</span><h2>تناسق الجسم للمرأة</h2>
+        <div class="pd-meta"><span>⏱ 10 أسابيع</span><span>📅 4 أيام/أسبوع</span><span>📊 كل المستويات</span></div>
+        <p>مصمم خصيصاً لتقوية وتنحيف الجسم مع التركيز على الأجزاء التي تهتم بها المرأة: الأرداف، الخصر، الذراعين. يشمل Pilates + مقاومة.</p>
+        <div class="week-plan"><h4>جدول الأسبوع</h4>
+          <div class="wdays">
+            <div class="wd on">السبت<br/><small>Lower Focus</small></div>
+            <div class="wd on">الأحد<br/><small>Upper Tone</small></div>
+            <div class="wd off">الاثنين<br/><small>راحة</small></div>
+            <div class="wd on">الثلاثاء<br/><small>Glute Day</small></div>
+            <div class="wd on">الأربعاء<br/><small>Full Cardio</small></div>
+            <div class="wd off">الخميس<br/><small>راحة</small></div>
+            <div class="wd off">الجمعة<br/><small>راحة</small></div>
+          </div>
+        </div>
+        <button class="btn-fire" data-page="contact">سجل في البرنامج</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== EXERCISES =================== -->
+<div class="page" id="page-exercises">
+  <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80&auto=format&fit=crop')">
+    <div class="ph-ov"></div>
+    <div class="ph-cnt"><span class="chip">مكتبة التمارين</span><h1>كل تمرين بالتفصيل</h1><p>الشكل الصحيح، العضلات المستهدفة، التعديلات اللازمة</p></div>
+  </div>
+  <div class="pb">
+    <div class="ex-filter" id="exFilter">
+      <button class="ef active" data-f="all">الكل</button>
+      <button class="ef" data-f="chest">الصدر</button>
+      <button class="ef" data-f="back">الظهر</button>
+      <button class="ef" data-f="legs">الأرجل</button>
+      <button class="ef" data-f="shoulders">الأكتاف</button>
+      <button class="ef" data-f="arms">الذراعين</button>
+      <button class="ef" data-f="core">Core</button>
+    </div>
+    <div class="ex-grid" id="exGrid"></div>
+  </div>
+</div>
+
+<!-- =================== NUTRITION =================== -->
+<div class="page" id="page-nutrition">
+  <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1600&q=80&auto=format&fit=crop')">
+    <div class="ph-ov"></div>
+    <div class="ph-cnt"><span class="chip">أنظمة التغذية</span><h1>الغذاء = 70%</h1><p>لا نتائج بدون غذاء صحيح — خطط مبنية على العلم</p></div>
+  </div>
+  <div class="pb">
+    <!-- CALCULATOR -->
+    <div class="calc-box">
+      <h3>🧮 احسب سعراتك اليومية</h3>
+      <div class="calc-form">
+        <div class="cf"><label>الوزن (كيلو)</label><input type="number" id="cW" placeholder="80" min="30" max="250"/></div>
+        <div class="cf"><label>الطول (سم)</label><input type="number" id="cH" placeholder="175" min="100" max="250"/></div>
+        <div class="cf"><label>العمر</label><input type="number" id="cA" placeholder="25" min="15" max="80"/></div>
+        <div class="cf"><label>الجنس</label><select id="cG"><option value="m">ذكر</option><option value="f">أنثى</option></select></div>
+        <div class="cf"><label>مستوى النشاط</label>
+          <select id="cAct">
+            <option value="1.2">جالس (لا رياضة)</option>
+            <option value="1.375">خفيف (1-3 أيام)</option>
+            <option value="1.55" selected>متوسط (3-5 أيام)</option>
+            <option value="1.725">نشط (6-7 أيام)</option>
+            <option value="1.9">مكثف جداً</option>
+          </select>
+        </div>
+        <button class="btn-fire" id="calcBtn">احسب ⚡</button>
+      </div>
+      <div class="calc-res" id="calcRes">
+        <div class="cr-cards">
+          <div class="crc"><span class="crn" id="crM">—</span><span>صيانة</span></div>
+          <div class="crc red-crc"><span class="crn" id="crC">—</span><span>تخسيس (−500)</span></div>
+          <div class="crc blue-crc"><span class="crn" id="crB">—</span><span>ضخامة (+300)</span></div>
+        </div>
+        <div class="macro-split" id="macroSplit"></div>
+      </div>
+    </div>
+
+    <!-- NUTRITION PLANS -->
+    <div class="nut-plans">
+      <h2 class="ch2">خطط التغذية التفصيلية</h2>
+      <div class="nut-tabs">
+        <button class="nt active" data-plan="bulk">💪 ضخامة</button>
+        <button class="nt" data-plan="cut">🔥 تخسيس</button>
+        <button class="nt" data-plan="maintain">⚖️ صيانة</button>
+        <button class="nt" data-plan="women">👑 للمرأة</button>
+      </div>
+      <div id="nutContent"></div>
+    </div>
+
+    <!-- SUPPLEMENTS -->
+    <div class="supps">
+      <h2>المكملات الغذائية <span class="red">الموصى بها</span></h2>
+      <div class="supps-grid">
+        <div class="sc"><div class="sc-em">🥛</div><h4>واي بروتين</h4><p>30-40 غرام بعد التمرين. يساعد على التعافي وبناء العضلات بكفاءة.</p><span class="sc-t">⏰ بعد التمرين</span></div>
+        <div class="sc"><div class="sc-em">💊</div><h4>كرياتين مونوهيدرات</h4><p>5 غرام يومياً. يزيد القوة والأداء بشكل موثق في مئات الدراسات العلمية.</p><span class="sc-t">⏰ أي وقت</span></div>
+        <div class="sc"><div class="sc-em">☕</div><h4>كافيين طبيعي</h4><p>200-400 ملغ قبل التمرين بـ 45 دقيقة. يحسن الأداء والتركيز ويحرق الدهون.</p><span class="sc-t">⏰ قبل التمرين</span></div>
+        <div class="sc"><div class="sc-em">🐟</div><h4>أوميغا 3</h4><p>2-3 غرام يومياً. يقلل الالتهابات ويحسن صحة المفاصل والقلب والدماغ.</p><span class="sc-t">⏰ مع الأكل</span></div>
+        <div class="sc"><div class="sc-em">☀️</div><h4>فيتامين D3+K2</h4><p>3000-5000 IU يومياً. ضروري لقوة العظام والهرمونات والمناعة، خاصة في السعودية.</p><span class="sc-t">⏰ مع الإفطار</span></div>
+        <div class="sc"><div class="sc-em">🧂</div><h4>المغنيسيوم Glycinate</h4><p>300-400 ملغ قبل النوم. يحسن جودة النوم، التعافي، ويقلل الكرامب العضلي.</p><span class="sc-t">⏰ قبل النوم</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== TRAINERS =================== -->
+<div class="page" id="page-trainers">
+  <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1600&q=80&auto=format&fit=crop')">
+    <div class="ph-ov"></div>
+    <div class="ph-cnt"><span class="chip">فريقنا</span><h1>مدربون يصنعون الفارق</h1><p>معتمدون دولياً، شغوفون، متفانون من أجلك</p></div>
+  </div>
+  <div class="pb">
+    <div class="tr-grid">
+      <div class="tr-card">
+        <div class="tr-img"><img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?w=600&q=80&auto=format&fit=crop" alt="أحمد الشمري"/><div class="tr-hov"><p>"التدريب ليس عقوبة — هو امتياز"</p></div></div>
+        <div class="tr-info">
+          <h3>أحمد الشمري</h3><span class="tr-role">قوة وبناء جسم</span>
+          <div class="tr-certs"><span>ISSA</span><span>SFG</span><span>CrossFit L2</span></div>
+          <p>8 سنوات خبرة · 150+ عميل ناجح · بطل رفع أثقال 2019</p>
+          <div class="tr-specs"><div><strong>التخصص</strong><br/>بناء العضلات، القوة القصوى</div><div><strong>التوفر</strong><br/>السبت–الخميس</div></div>
+          <button class="btn-outline-r" data-page="contact">احجز جلسة</button>
+        </div>
+      </div>
+      <div class="tr-card ft">
+        <div class="tr-img"><img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=600&q=80&auto=format&fit=crop" alt="سارة العنزي"/><div class="tr-hov"><p>"كل امرأة تستحق جسماً تفخر به"</p></div></div>
+        <div class="tr-info">
+          <h3>سارة العنزي</h3><span class="tr-role">لياقة وتحول الجسم</span>
+          <div class="tr-certs"><span>NASM-CPT</span><span>Precision Nutrition</span></div>
+          <p>6 سنوات خبرة · متخصصة في تدريب المرأة · 200+ تحول ناجح</p>
+          <div class="tr-specs"><div><strong>التخصص</strong><br/>تخسيس، تناسق، HIIT</div><div><strong>التوفر</strong><br/>يومياً</div></div>
+          <button class="btn-fire" data-page="contact">احجز جلسة</button>
+        </div>
+      </div>
+      <div class="tr-card">
+        <div class="tr-img"><img src="https://images.unsplash.com/photo-1611672585731-fa10603fb9e0?w=600&q=80&auto=format&fit=crop" alt="خالد المطيري"/><div class="tr-hov"><p>"الجسم يتحمل أكثر مما يتحمل العقل"</p></div></div>
+        <div class="tr-info">
+          <h3>خالد المطيري</h3><span class="tr-role">ملاكمة وكروس فت</span>
+          <div class="tr-certs"><span>CrossFit L3</span><span>Boxing Coach</span></div>
+          <p>10 سنوات خبرة · لاعب MMA سابق · مختص بالتدريب الوظيفي</p>
+          <div class="tr-specs"><div><strong>التخصص</strong><br/>CrossFit, Boxing, HIIT</div><div><strong>التوفر</strong><br/>السبت–الأربعاء</div></div>
+          <button class="btn-outline-r" data-page="contact">احجز جلسة</button>
+        </div>
+      </div>
+      <div class="tr-card">
+        <div class="tr-img"><img src="https://images.unsplash.com/photo-1607962837359-5e7e89f86776?w=600&q=80&auto=format&fit=crop" alt="ريم الحربي"/><div class="tr-hov"><p>"الطعام دواء إذا أحسنت اختياره"</p></div></div>
+        <div class="tr-info">
+          <h3>ريم الحربي</h3><span class="tr-role">أخصائية تغذية رياضية</span>
+          <div class="tr-certs"><span>RD</span><span>CSSD</span><span>PN Level 2</span></div>
+          <p>بكالوريوس تغذية · دكتوراه علم الغذاء الرياضي · 300+ خطة غذائية مخصصة</p>
+          <div class="tr-specs"><div><strong>التخصص</strong><br/>خطط غذائية، مكملات</div><div><strong>التوفر</strong><br/>الأحد–الخميس</div></div>
+          <button class="btn-outline-r" data-page="contact">احجز جلسة</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== PRICING =================== -->
+<div class="page" id="page-pricing">
+  <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1576678927484-cc907957088c?w=1600&q=80&auto=format&fit=crop')">
+    <div class="ph-ov"></div>
+    <div class="ph-cnt"><span class="chip">الاشتراكات</span><h1>استثمر في نفسك</h1><p>أسعار واضحة بدون رسوم مخفية</p></div>
+  </div>
+  <div class="pb">
+    <div class="toggle-wrap">
+      <span>شهري</span>
+      <label class="tog-sw"><input type="checkbox" id="annTog"/><span class="tog-sl"></span></label>
+      <span>سنوي <span class="save-b">وفّر 20%</span></span>
+    </div>
+    <div class="price-cards">
+      <div class="prc">
+        <div class="prt">مبتدئ</div>
+        <div class="prp"><span class="prc-cur">ر.س</span><span class="prn" data-m="149" data-a="119">149</span><span class="prper">/شهر</span></div>
+        <p class="prd">مثالي لمن يريد بداية صحيحة</p>
+        <ul class="prf">
+          <li class="y">دخول القاعة الرئيسية</li><li class="y">خطة تمرين مكتوبة</li><li class="y">تقييم لياقة أولي</li><li class="y">تطبيق تتبع التقدم</li>
+          <li class="n">مدرب شخصي</li><li class="n">خطة غذائية</li><li class="n">فصول جماعية</li><li class="n">سبا وجاكوزي</li>
+        </ul>
+        <button class="btn-outline-r" data-page="contact">ابدأ الآن</button>
+      </div>
+      <div class="prc pop-prc">
+        <div class="pop-rib">⭐ الأكثر شعبية</div>
+        <div class="prt">محترف</div>
+        <div class="prp"><span class="prc-cur">ر.س</span><span class="prn" data-m="299" data-a="239">299</span><span class="prper">/شهر</span></div>
+        <p class="prd">الباقة الشاملة للنتائج الحقيقية</p>
+        <ul class="prf">
+          <li class="y">كل مزايا المبتدئ</li><li class="y">8 جلسات مع مدرب شخصي</li><li class="y">خطة غذائية مخصصة كاملة</li><li class="y">دخول جميع الفصول الجماعية</li>
+          <li class="y">قياسات تركيبة الجسم شهرياً</li><li class="y">متابعة واتساب مع المدرب</li><li class="n">جلسات غير محدودة</li><li class="n">سبا + جاكوزي</li>
+        </ul>
+        <button class="btn-fire" data-page="contact">ابدأ الآن</button>
+      </div>
+      <div class="prc">
+        <div class="prt">VIP</div>
+        <div class="prp"><span class="prc-cur">ر.س</span><span class="prn" data-m="499" data-a="399">499</span><span class="prper">/شهر</span></div>
+        <p class="prd">تجربة استثنائية بلا حدود</p>
+        <ul class="prf">
+          <li class="y">كل مزايا المحترف</li><li class="y">جلسات مدرب غير محدودة</li><li class="y">أولوية الحجز والجداول</li><li class="y">سبا + جاكوزي + مسبح</li>
+          <li class="y">مكملات أساسية شهرياً</li><li class="y">دعم تغذية 24/7</li><li class="y">تحليل أداء متقدم</li><li class="y">ضيف مجاني 2/شهر</li>
+        </ul>
+        <button class="btn-outline-r" data-page="contact">ابدأ الآن</button>
+      </div>
+    </div>
+    <p class="compare-note">جميع الأسعار تشمل ضريبة القيمة المضافة · إلغاء مجاني خلال 14 يوم</p>
+  </div>
+</div>
+
+<!-- =================== CONTACT =================== -->
+<div class="page" id="page-contact">
+  <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=1600&q=80&auto=format&fit=crop')">
+    <div class="ph-ov"></div>
+    <div class="ph-cnt"><span class="chip">تواصل معنا</span><h1>الخطوة الأولى<br/>تبدأ هنا</h1><p>جلسة تقييم مجانية 60 دقيقة مع مدرب معتمد</p></div>
+  </div>
+  <div class="pb">
+    <div class="contact-lay">
+      <div class="cl-info">
+        <h2>كيف تصلنا؟</h2>
+        <div class="ci-list">
+          <div class="ci"><span>📍</span><div><strong>العنوان</strong><p>طريق الملك عبدالله، حي الملقا، الرياض</p></div></div>
+          <div class="ci"><span>📞</span><div><strong>الهاتف</strong><p>+966 50 123 4567</p></div></div>
+          <div class="ci"><span>📧</span><div><strong>البريد</strong><p>info@beastgym.sa</p></div></div>
+          <div class="ci"><span>⏰</span><div><strong>أوقات العمل</strong><p>مفتوح 24 ساعة / 7 أيام</p></div></div>
+        </div>
+        <div class="map-ph">
+          <div class="map-pin-wrap"><div class="map-ping">📍</div><p>BEAST GYM<br/><small>طريق الملك عبدالله، الرياض</small></p></div>
+          <div class="map-grid-bg"></div>
+        </div>
+        <div class="soc-row">
+          <a class="sb ig" href="#">📸 Instagram</a>
+          <a class="sb wa" href="#">💬 WhatsApp</a>
+          <a class="sb tt" href="#">🎵 TikTok</a>
+        </div>
+      </div>
+      <div class="cl-form">
+        <div class="cf-box">
+          <h3>احجز تجربتك المجانية</h3>
+          <p class="cf-sub">جلسة تقييم مجانية 60 دقيقة مع مدرب معتمد</p>
+          <form id="mainForm" novalidate>
+            <div class="fg"><label>الاسم الكامل *</label><input type="text" id="fN" placeholder="محمد العلي" required/></div>
+            <div class="fg-row">
+              <div class="fg"><label>رقم الجوال *</label><input type="tel" id="fP" placeholder="05xxxxxxxx" required/></div>
+              <div class="fg"><label>العمر</label><input type="number" id="fAg" placeholder="25" min="15" max="70"/></div>
+            </div>
+            <div class="fg"><label>البريد الإلكتروني *</label><input type="email" id="fE" placeholder="example@email.com" required/></div>
+            <div class="fg"><label>هدفك الرياضي *</label>
+              <select id="fGo" required>
+                <option value="">اختر هدفك</option>
+                <option>بناء وتضخيم العضلات</option>
+                <option>التخسيس وحرق الدهون</option>
+                <option>تحسين اللياقة العامة</option>
+                <option>رفع الأثقال التنافسي</option>
+                <option>تناسق الجسم للمرأة</option>
+                <option>التعافي من إصابة</option>
+              </select>
+            </div>
+            <div class="fg"><label>مستواك الحالي</label>
+              <div class="rg">
+                <label class="rl"><input type="radio" name="lvl" value="مبتدئ"/> مبتدئ تماماً</label>
+                <label class="rl"><input type="radio" name="lvl" value="متوسط" checked/> متوسط (6+ أشهر)</label>
+                <label class="rl"><input type="radio" name="lvl" value="متقدم"/> متقدم (2+ سنوات)</label>
+              </div>
+            </div>
+            <div class="fg"><label>رسالة إضافية</label><textarea id="fM" rows="3" placeholder="أخبرنا عن نفسك أكثر..."></textarea></div>
+            <button type="submit" class="btn-fire full-btn"><span id="sTxt">احجز جلستي المجانية 🔥</span></button>
+            <div id="fStatus" class="fstatus"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end app -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="ft-inner">
+    <div class="ft-brand">
+      <div class="nav-logo"><svg width="24" height="24" viewBox="0 0 28 28"><polygon points="14,2 26,8 26,20 14,26 2,20 2,8" fill="none" stroke="#e63946" stroke-width="2"/><text x="14" y="18" text-anchor="middle" fill="#fff" font-size="9" font-weight="900" font-family="sans-serif">BG</text></svg><span>BEAST<em>GYM</em></span></div>
+      <p>نادي لياقة بدنية من الدرجة الأولى. معدات عالمية، مدربون محترفون، نتائج مضمونة.</p>
+    </div>
+    <div class="ft-nav"><h5>الصفحات</h5><a data-page="home">الرئيسية</a><a data-page="programs">البرامج</a><a data-page="exercises">التمارين</a><a data-page="nutrition">التغذية</a><a data-page="trainers">المدربون</a><a data-page="pricing">الأسعار</a></div>
+    <div class="ft-nav"><h5>معلومات</h5><a href="#">سياسة الخصوصية</a><a href="#">الشروط والأحكام</a><a href="#">سياسة الإلغاء</a><a data-page="contact">تواصل معنا</a></div>
+    <div class="ft-contact"><h5>تواصل</h5><p>📍 طريق الملك عبدالله، الرياض</p><p>📞 +966 50 123 4567</p><p>📧 info@beastgym.sa</p><p>⏰ مفتوح 24/7</p></div>
+  </div>
+  <div class="ft-bot">
+    <span>© 2025 BEAST GYM. جميع الحقوق محفوظة.</span>
+    <div class="ft-trust"><span>🔒 آمن 100%</span><span>🏅 معتمد دولياً</span><span>⭐ 4.9/5</span></div>
+  </div>
+</footer>
+
+<button id="btt">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

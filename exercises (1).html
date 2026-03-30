@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BEAST GYM | مكتبة التمارين التفاعلية</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --r:#e63946;--rd:#b5202c;--rg:rgba(230,57,70,.3);
+  --b:#4361ee;--bl:#4cc9f0;
+  --bk:#080b10;--d1:#0d1117;--d2:#131920;--d3:#1a2130;
+  --card:rgba(255,255,255,.04);--bdr:rgba(255,255,255,.08);
+  --tx:#eef0f5;--mt:#8899bb;--dim:#445566;
+  --ff:'Tajawal',sans-serif;--fd:'Bebas Neue',sans-serif;
+  --rad:14px;--radlg:20px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--ff);background:var(--bk);color:var(--tx);overflow-x:hidden;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--r);border-radius:99px}
+::selection{background:rgba(230,57,70,.3)}
+
+/* ====== NAV ====== */
+.nav{position:fixed;top:0;inset-inline:0;z-index:200;background:rgba(8,11,16,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);height:64px;display:flex;align-items:center;padding:0 clamp(16px,4vw,48px);gap:20px}
+.nav-logo{font-family:var(--fd);font-size:1.4rem;letter-spacing:1px;color:#fff;text-decoration:none;flex-shrink:0}
+.nav-logo em{color:var(--r);font-style:normal}
+.nav-back{margin-right:auto;background:rgba(255,255,255,.07);border:1px solid var(--bdr);color:var(--mt);padding:7px 16px;border-radius:8px;font-family:var(--ff);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:6px}
+.nav-back:hover{border-color:var(--r);color:var(--tx)}
+.nav-xp{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.xp-bar-wrap{background:var(--d3);border-radius:99px;height:6px;width:120px;overflow:hidden}
+.xp-bar{height:100%;background:linear-gradient(90deg,var(--r),var(--bl));border-radius:99px;transition:width .6s ease}
+.xp-lbl{font-size:.75rem;font-weight:700;color:var(--mt)}
+.lvl-badge{background:var(--r);color:#fff;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:99px}
+
+/* ====== PROGRESS BAR ====== */
+#pgbar{position:fixed;top:64px;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--r),var(--bl));z-index:300;transform-origin:left;transform:scaleX(0);transition:transform .1s}
+
+/* ====== HERO ====== */
+.hero{position:relative;height:420px;display:flex;align-items:flex-end;overflow:hidden;padding-top:64px}
+.hero-bg{position:absolute;inset:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 35%}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,11,16,1) 0%,rgba(8,11,16,.7) 50%,rgba(8,11,16,.2) 100%)}
+.hero-cnt{position:relative;z-index:1;padding:0 clamp(20px,5vw,80px) 40px}
+.chip{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--r);background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.2);padding:3px 12px;border-radius:99px;margin-bottom:12px}
+.hero-cnt h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1;margin-bottom:10px}
+.hero-cnt h1 span{color:var(--r)}
+.hero-cnt p{color:rgba(238,240,245,.7);font-size:1rem;max-width:560px}
+
+/* ====== LAYOUT ====== */
+.main-wrap{display:grid;grid-template-columns:320px 1fr;gap:0;min-height:calc(100vh - 420px - 64px)}
+@media(max-width:960px){.main-wrap{grid-template-columns:1fr}}
+
+/* ====== SIDEBAR ====== */
+.sidebar{background:var(--d1);border-right:1px solid var(--bdr);padding:24px;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;display:flex;flex-direction:column;gap:20px}
+@media(max-width:960px){.sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--bdr)}}
+.sb-section{flex:1;min-width:220px}
+.sb-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--mt);margin-bottom:12px}
+
+/* Search */
+.search-box{position:relative}
+.search-box input{width:100%;background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:10px 40px 10px 14px;font-family:var(--ff);font-size:.88rem;color:var(--tx);outline:none;transition:border-color .25s}
+.search-box input:focus{border-color:var(--r);box-shadow:0 0 0 3px rgba(230,57,70,.1)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none}
+
+/* Filters */
+.filter-list{display:flex;flex-direction:column;gap:4px}
+@media(max-width:960px){.filter-list{flex-direction:row;flex-wrap:wrap}}
+.fl-btn{display:flex;align-items:center;gap:10px;background:none;border:1px solid transparent;border-radius:10px;padding:10px 12px;cursor:pointer;font-family:var(--ff);font-size:.88rem;color:var(--mt);transition:all .25s;width:100%;text-align:right}
+.fl-btn:hover{background:var(--card);color:var(--tx)}
+.fl-btn.act{background:rgba(230,57,70,.1);border-color:rgba(230,57,70,.3);color:var(--tx)}
+.fl-ic{font-size:1.2rem;flex-shrink:0}
+.fl-cnt{background:var(--d3);color:var(--mt);font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:99px;margin-right:auto}
+
+/* Achievement board */
+.ach-list{display:flex;flex-direction:column;gap:8px}
+.ach-item{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:10px 12px;transition:all .3s}
+.ach-item.unlocked{border-color:rgba(230,57,70,.3);background:rgba(230,57,70,.05)}
+.ach-item.unlocked .ach-ic{filter:none}
+.ach-ic{font-size:1.6rem;filter:grayscale(1) opacity(.3);transition:filter .5s}
+.ach-info strong{display:block;font-size:.82rem;font-weight:700}
+.ach-info small{font-size:.72rem;color:var(--mt)}
+.ach-lock{font-size:.7rem;color:var(--dim);margin-right:auto;flex-shrink:0}
+
+/* Streak */
+.streak-box{background:linear-gradient(135deg,rgba(230,57,70,.1),rgba(67,97,238,.05));border:1px solid rgba(230,57,70,.2);border-radius:var(--rad);padding:16px;text-align:center}
+.streak-num{font-family:var(--fd);font-size:3rem;color:var(--r);line-height:1}
+.streak-lbl{font-size:.78rem;color:var(--mt)}
+.streak-days{display:flex;gap:4px;justify-content:center;margin-top:10px}
+.sd{width:24px;height:24px;border-radius:6px;background:var(--d3);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:var(--dim)}
+.sd.done{background:rgba(230,57,70,.2);border-color:var(--r);color:var(--r)}
+.sd.today{background:var(--r);color:#fff;border-color:var(--r);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--rg)}50%{box-shadow:0 0 0 6px transparent}}
+
+/* ====== EXERCISE GRID ====== */
+.content{padding:28px;background:var(--bk)}
+.sort-bar{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.sort-bar span{font-size:.82rem;color:var(--mt)}
+.sort-sel{background:var(--card);border:1px solid var(--bdr);color:var(--tx);padding:6px 12px;border-radius:8px;font-family:var(--ff);font-size:.82rem;outline:none;cursor:pointer}
+.ex-count{font-size:.82rem;color:var(--mt);margin-right:auto}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+
+/* ====== EXERCISE CARD ====== */
+.ex-card{background:var(--d2);border:1px solid var(--bdr);border-radius:var(--radlg);overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
+.ex-card:hover{border-color:rgba(230,57,70,.35);transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.5)}
+.ex-card.completed{border-color:rgba(39,174,96,.3)}
+.ex-card.completed::before{content:'✓ مكتمل';position:absolute;top:10px;left:10px;background:rgba(39,174,96,.9);color:#fff;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:99px;z-index:5}
+.card-img{position:relative;height:210px;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .5s}
+.ex-card:hover .card-img img{transform:scale(1.06)}
+.card-badges{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:5px}
+.badge-muscle{background:var(--r);color:#fff;font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:99px}
+.badge-level{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:99px}
+.badge-level.beg{background:rgba(39,174,96,.85);color:#fff}
+.badge-level.int{background:rgba(243,156,18,.85);color:#fff}
+.badge-level.adv{background:rgba(230,57,70,.85);color:#fff}
+/* GIF overlay hint */
+.card-img::after{content:'▶ شاهد التمرين';position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:.88rem;font-weight:700;color:#fff;opacity:0;transition:opacity .3s;letter-spacing:.5px}
+.ex-card:hover .card-img::after{opacity:1}
+.card-body{padding:18px}
+.card-name{font-size:1.05rem;font-weight:800;margin-bottom:4px}
+.card-muscle-ar{font-size:.78rem;color:var(--r);font-weight:600;margin-bottom:8px}
+.card-desc{font-size:.82rem;color:var(--mt);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.cm-item{background:var(--card);border:1px solid var(--bdr);border-radius:7px;padding:3px 9px;font-size:.72rem;color:var(--mt)}
+.card-actions{display:flex;gap:8px}
+.btn-start{flex:1;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;border:none;border-radius:9px;padding:10px;font-family:var(--ff);font-size:.85rem;font-weight:700;cursor:pointer;transition:all .25s}
+.btn-start:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(230,57,70,.4)}
+.btn-info{background:var(--card);border:1px solid var(--bdr);color:var(--mt);border-radius:9px;padding:10px 14px;font-family:var(--ff);font-size:.85rem;cursor:pointer;transition:all .25s}
+.btn-info:hover{border-color:var(--r);color:var(--tx)}
+
+/* ====== MODAL ====== */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:all .3s;backdrop-filter:blur(8px)}
+.modal-bg.open{opacity:1;visibility:visible}
+.modal{background:var(--d1);border:1px solid var(--bdr);border-radius:var(--radlg);width:100%;max-width:920px;max-height:90vh;overflow-y:auto;position:relative;transform:scale(.95) translateY(20px);transition:transform .3s;display:grid;grid-template-columns:1fr 1fr}
+@media(max-width:680px){.modal{grid-template-columns:1fr}}
+.modal-bg.open .modal{transform:scale(1) translateY(0)}
+.modal-close{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.08);border:1px solid var(--bdr);color:var(--tx);width:36px;height:36px;border-radius:8px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;z-index:10}
+.modal-close:hover{background:var(--r);border-color:var(--r)}
+
+/* MODAL LEFT */
+.modal-visual{position:relative;min-height:400px;background:var(--d2);overflow:hidden;border-radius:var(--radlg) 0 0 var(--radlg)}
+@media(max-width:680px){.modal-visual{border-radius:var(--radlg) var(--radlg) 0 0;min-height:280px}}
+.modal-img{width:100%;height:100%;object-fit:cover;object-position:top center}
+
+/* SVG person animation */
+.person-anim{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.person-anim svg{width:min(260px,80%);height:auto;filter:drop-shadow(0 8px 24px rgba(230,57,70,.4))}
+
+/* phase indicator */
+.phase-bar{position:absolute;bottom:0;left:0;right:0;background:rgba(8,11,16,.9);padding:14px;display:flex;align-items:center;gap:12px}
+.phase-dots{display:flex;gap:6px}
+.pdot{width:10px;height:10px;border-radius:50%;background:var(--d3);border:1.5px solid var(--bdr);transition:all .4s}
+.pdot.act{background:var(--r);border-color:var(--r);transform:scale(1.3)}
+.phase-name{font-size:.8rem;font-weight:600;color:var(--tx)}
+.phase-cue{font-size:.72rem;color:var(--mt);margin-right:auto}
+
+/* MODAL RIGHT */
+.modal-info{padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:18px;overflow-y:auto}
+.modal-chip{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.2);padding:3px 10px;border-radius:99px}
+.modal-name{font-size:1.4rem;font-weight:900;line-height:1.2}
+.modal-desc{font-size:.88rem;color:var(--mt);line-height:1.7}
+.modal-badges{display:flex;gap:8px;flex-wrap:wrap}
+.mb{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:5px 12px;font-size:.75rem;color:var(--mt)}
+.mb strong{color:var(--tx)}
+
+/* Muscles targeted visual */
+.muscles-visual{background:var(--d2);border:1px solid var(--bdr);border-radius:var(--rad);padding:16px}
+.mv-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--mt);margin-bottom:12px}
+.muscle-tags{display:flex;flex-wrap:wrap;gap:6px}
+.mtag{padding:5px 12px;border-radius:99px;font-size:.75rem;font-weight:700}
+.mtag.primary{background:rgba(230,57,70,.15);border:1px solid rgba(230,57,70,.3);color:var(--r)}
+.mtag.secondary{background:var(--card);border:1px solid var(--bdr);color:var(--mt)}
+
+/* Tips */
+.tips-box{background:rgba(67,97,238,.06);border:1px solid rgba(67,97,238,.2);border-radius:var(--rad);padding:14px}
+.tips-title{font-size:.72rem;font-weight:700;color:var(--bl);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.tip-item{display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:var(--mt);margin-bottom:6px;line-height:1.5}
+.tip-item:last-child{margin-bottom:0}
+.tip-item::before{content:'→';color:var(--bl);flex-shrink:0;font-weight:700}
+
+/* ====== WORKOUT PLAYER ====== */
+.workout-player{position:fixed;inset:0;background:var(--bk);z-index:2000;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:all .3s}
+.workout-player.open{opacity:1;visibility:visible}
+
+.wp-top{height:60px;background:rgba(13,17,23,.9);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 clamp(16px,3vw,36px);gap:16px;flex-shrink:0}
+.wp-ex-name{font-size:1rem;font-weight:800;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wp-close{background:rgba(255,255,255,.07);border:1px solid var(--bdr);color:var(--tx);width:36px;height:36px;border-radius:8px;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s}
+.wp-close:hover{background:var(--r);border-color:var(--r)}
+
+.wp-body{flex:1;display:grid;grid-template-columns:1fr 420px;overflow:hidden}
+@media(max-width:900px){.wp-body{grid-template-columns:1fr}}
+
+/* LEFT — animation area */
+.wp-visual{position:relative;background:var(--d1);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:32px}
+.wp-visual-bg{position:absolute;inset:0;opacity:.04;background-image:radial-gradient(circle at center,var(--r) 1px,transparent 1px);background-size:40px 40px}
+.wp-anim-wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:24px}
+
+/* SVG workout figure — big */
+.figure-svg{width:min(280px,80vw);height:auto;filter:drop-shadow(0 0 40px rgba(230,57,70,.3))}
+
+/* phase label on visual */
+.wp-phase-label{font-family:var(--fd);font-size:3rem;color:var(--r);letter-spacing:2px;text-align:center;text-shadow:0 0 30px rgba(230,57,70,.5);transition:all .3s}
+.wp-cue{font-size:.95rem;color:rgba(238,240,245,.6);text-align:center;max-width:260px;line-height:1.5}
+
+/* breath ring */
+.breath-ring{width:120px;height:120px;border-radius:50%;border:2px solid rgba(230,57,70,.2);position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.breath-ring::before{content:'';position:absolute;inset:8px;border-radius:50%;border:2px solid rgba(67,97,238,.2)}
+.breath-ring-inner{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(230,57,70,.2),transparent);border:2px solid var(--r);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--r);transition:all .5s}
+
+/* RIGHT — controls */
+.wp-controls{background:var(--d2);border-right:1px solid var(--bdr);padding:clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:20px;overflow-y:auto}
+@media(max-width:900px){.wp-controls{max-height:50vh}}
+
+/* Timer circle */
+.timer-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.timer-svg-wrap{position:relative;width:160px;height:160px;flex-shrink:0}
+.timer-svg{transform:rotate(-90deg);width:160px;height:160px}
+.timer-track{fill:none;stroke:var(--d3);stroke-width:8}
+.timer-prog{fill:none;stroke:var(--r);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .9s linear,stroke .5s}
+.timer-display{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.timer-num{font-family:var(--fd);font-size:2.8rem;line-height:1;letter-spacing:2px}
+.timer-sub{font-size:.7rem;color:var(--mt);text-align:center}
+
+/* Set tracker */
+.set-track{background:var(--d1);border:1px solid var(--bdr);border-radius:var(--rad);padding:16px}
+.st-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.st-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--mt)}
+.st-progress{font-size:.82rem;font-weight:700;color:var(--r)}
+.sets-row{display:flex;gap:8px;flex-wrap:wrap}
+.set-bubble{width:44px;height:44px;border-radius:50%;background:var(--d3);border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:var(--dim);transition:all .4s;cursor:default}
+.set-bubble.done{background:rgba(230,57,70,.15);border-color:var(--r);color:var(--r)}
+.set-bubble.current{background:var(--r);border-color:var(--r);color:#fff;animation:pulse 1.5s ease-in-out infinite;transform:scale(1.1)}
+
+/* Rep counter */
+.rep-counter{text-align:center}
+.rc-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--mt);margin-bottom:8px}
+.rc-display{font-family:var(--fd);font-size:4rem;color:var(--tx);line-height:1;position:relative;display:inline-block}
+.rc-display.flash{animation:flash .3s ease}
+@keyframes flash{0%,100%{color:var(--tx)}50%{color:var(--r)}}
+.rc-target{font-size:.78rem;color:var(--mt)}
+.rc-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.rc-btn{width:48px;height:48px;border-radius:12px;border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-size:1.4rem;font-weight:900;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;font-family:var(--fd)}
+.rc-btn:hover{transform:scale(1.08)}
+.rc-btn.plus:hover{background:var(--r);border-color:var(--r)}
+.rc-btn.minus:hover{background:var(--d3)}
+
+/* Main controls */
+.wp-btns{display:flex;gap:10px}
+.wp-btn-main{flex:1;background:linear-gradient(135deg,var(--r),var(--rd));color:#fff;border:none;border-radius:12px;padding:14px;font-family:var(--ff);font-size:.95rem;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px}
+.wp-btn-main:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(230,57,70,.4)}
+.wp-btn-main:disabled{opacity:.5;transform:none;box-shadow:none}
+.wp-btn-sec{background:var(--card);border:1px solid var(--bdr);color:var(--mt);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .25s;font-family:var(--ff);font-size:.9rem}
+.wp-btn-sec:hover{border-color:var(--r);color:var(--tx)}
+
+/* Rest timer */
+.rest-overlay{position:absolute;inset:0;background:rgba(8,11,16,.95);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;opacity:0;visibility:hidden;transition:all .3s}
+.rest-overlay.show{opacity:1;visibility:visible}
+.rest-title{font-family:var(--fd);font-size:2.5rem;color:var(--bl);letter-spacing:3px}
+.rest-num{font-family:var(--fd);font-size:6rem;color:var(--tx);line-height:1}
+.rest-sub{font-size:.88rem;color:var(--mt)}
+.rest-bar-wrap{width:200px;height:4px;background:var(--d3);border-radius:99px;overflow:hidden}
+.rest-bar{height:100%;background:linear-gradient(90deg,var(--bl),var(--b));border-radius:99px;transition:width 1s linear}
+
+/* Workout done overlay */
+.done-overlay{position:fixed;inset:0;background:rgba(8,11,16,.97);z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;opacity:0;visibility:hidden;transition:all .4s;text-align:center;padding:24px}
+.done-overlay.show{opacity:1;visibility:visible}
+.done-icon{font-size:5rem;animation:bounce 1s ease infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.done-title{font-family:var(--fd);font-size:clamp(2.5rem,8vw,5rem);color:var(--r);letter-spacing:4px}
+.done-stats{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+.ds{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rad);padding:16px 24px;text-align:center}
+.ds-num{font-family:var(--fd);font-size:2.5rem;color:var(--r);line-height:1}
+.ds-lbl{font-size:.78rem;color:var(--mt);margin-top:4px}
+.confetti-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.conf-dot{position:absolute;width:8px;height:8px;border-radius:2px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ====== BOTTOM PROGRESS ====== */
+.progress-strip{position:fixed;bottom:0;left:0;right:0;background:rgba(13,17,23,.95);border-top:1px solid var(--bdr);padding:10px clamp(16px,3vw,36px);display:flex;align-items:center;gap:16px;z-index:100;backdrop-filter:blur(12px)}
+.ps-label{font-size:.78rem;color:var(--mt);flex-shrink:0}
+.ps-bar-wrap{flex:1;height:6px;background:var(--d3);border-radius:99px;overflow:hidden}
+.ps-bar{height:100%;background:linear-gradient(90deg,var(--r),var(--bl));border-radius:99px;transition:width .6s ease}
+.ps-count{font-size:.78rem;font-weight:700;color:var(--r);flex-shrink:0}
+.ps-xp{font-size:.78rem;color:var(--mt);flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="index.html">BEAST<em>GYM</em></a>
+  <span style="color:var(--bdr);font-size:1.2rem">|</span>
+  <span style="font-size:.85rem;font-weight:600;color:var(--mt)">مكتبة التمارين</span>
+  <button class="nav-back" onclick="window.location.href='index.html'">← العودة للرئيسية</button>
+  <div class="nav-xp" id="navXP">
+    <span class="lvl-badge" id="lvlBadge">المستوى 1</span>
+    <div class="xp-bar-wrap"><div class="xp-bar" id="xpBar" style="width:0%"></div></div>
+    <span class="xp-lbl" id="xpLbl">0 / 100 XP</span>
+  </div>
+</nav>
+<div id="pgbar"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80&auto=format&fit=crop" alt="جيم"/>
+    <div class="hero-ov"></div>
+  </div>
+  <div class="hero-cnt">
+    <span class="chip">مكتبة التمارين</span>
+    <h1>ابدأ تمرينك <span>الآن</span></h1>
+    <p>18 تمرين احترافي مع عداد، تتبع مجموعات، ولوحة إنجازات — كل شيء تحتاجه لتتمرن صح</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- Search -->
+    <div class="sb-section">
+      <div class="sb-title">ابحث عن تمرين</div>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Bench Press، سكوات..."/>
+        <span class="search-icon">🔍</span>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="sb-section">
+      <div class="sb-title">تصفية حسب العضلة</div>
+      <div class="filter-list" id="filterList">
+        <button class="fl-btn act" data-f="all"><span class="fl-ic">💪</span>كل التمارين<span class="fl-cnt">18</span></button>
+        <button class="fl-btn" data-f="chest"><span class="fl-ic">🎯</span>الصدر<span class="fl-cnt">3</span></button>
+        <button class="fl-btn" data-f="back"><span class="fl-ic">🔙</span>الظهر<span class="fl-cnt">3</span></button>
+        <button class="fl-btn" data-f="legs"><span class="fl-ic">🦵</span>الأرجل<span class="fl-cnt">3</span></button>
+        <button class="fl-btn" data-f="shoulders"><span class="fl-ic">🏔️</span>الأكتاف<span class="fl-cnt">3</span></button>
+        <button class="fl-btn" data-f="arms"><span class="fl-ic">💪</span>الذراعين<span class="fl-cnt">3</span></button>
+        <button class="fl-btn" data-f="core"><span class="fl-ic">⚡</span>Core والبطن<span class="fl-cnt">3</span></button>
+      </div>
+    </div>
+
+    <!-- Streak -->
+    <div class="sb-section">
+      <div class="sb-title">سلسلة التمارين</div>
+      <div class="streak-box">
+        <div class="streak-num" id="streakNum">0</div>
+        <div class="streak-lbl">أيام متتالية 🔥</div>
+        <div class="streak-days" id="streakDays"></div>
+      </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="sb-section">
+      <div class="sb-title">الإنجازات</div>
+      <div class="ach-list" id="achList"></div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="sort-bar">
+      <span>ترتيب حسب:</span>
+      <select class="sort-sel" id="sortSel">
+        <option value="default">الافتراضي</option>
+        <option value="name">الاسم</option>
+        <option value="level">المستوى</option>
+        <option value="completed">المكتملة أولاً</option>
+      </select>
+      <span class="ex-count" id="exCount">18 تمرين</span>
+    </div>
+    <div class="ex-grid" id="exGrid"></div>
+  </div>
+</div>
+
+<!-- BOTTOM PROGRESS -->
+<div class="progress-strip">
+  <span class="ps-label">تقدمك اليوم:</span>
+  <div class="ps-bar-wrap"><div class="ps-bar" id="psBar" style="width:0%"></div></div>
+  <span class="ps-count" id="psCount">0 / 0</span>
+  <span class="ps-xp" id="psXp">0 XP مكتسب</span>
+</div>
+
+<!-- EXERCISE DETAIL MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <!-- LEFT -->
+    <div class="modal-visual" id="modalVisual">
+      <img class="modal-img" id="modalImg" src="" alt=""/>
+      <!-- Animated person overlay -->
+      <div class="person-anim" id="personAnim"></div>
+      <!-- Phase indicator -->
+      <div class="phase-bar" id="phaseBar">
+        <div class="phase-dots" id="phaseDots"></div>
+        <span class="phase-name" id="phaseName">استعد</span>
+        <span class="phase-cue" id="phaseCue">اضغط ابدأ التمرين</span>
+      </div>
+    </div>
+    <!-- RIGHT -->
+    <div class="modal-info" id="modalInfo"></div>
+  </div>
+</div>
+
+<!-- WORKOUT PLAYER (fullscreen) -->
+<div class="workout-player" id="workoutPlayer">
+  <div class="wp-top">
+    <button class="wp-close" id="wpClose">✕</button>
+    <span class="wp-ex-name" id="wpExName">—</span>
+    <div style="display:flex;align-items:center;gap:8px;margin-right:auto">
+      <span style="font-size:.75rem;color:var(--mt)">مجموعة</span>
+      <span id="wpSetIndicator" style="font-size:.88rem;font-weight:700;color:var(--r)">1/4</span>
+    </div>
+  </div>
+  <div class="wp-body">
+    <!-- VISUAL -->
+    <div class="wp-visual">
+      <div class="wp-visual-bg"></div>
+      <div class="wp-anim-wrap">
+        <svg class="figure-svg" id="wpFigure" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- Dynamic SVG person injected by JS -->
+        </svg>
+        <div class="wp-phase-label" id="wpPhaseLabel">استعد</div>
+        <div class="wp-cue" id="wpCue">اضغط ابدأ لتبدأ التمرين</div>
+        <div class="breath-ring" id="breathRing">
+          <div class="breath-ring-inner" id="breathInner">تنفس</div>
+        </div>
+      </div>
+      <!-- Rest overlay -->
+      <div class="rest-overlay" id="restOverlay">
+        <div class="rest-title">استراحة</div>
+        <div class="rest-num" id="restNum">60</div>
+        <div class="rest-sub">ثانية قبل المجموعة التالية</div>
+        <div class="rest-bar-wrap"><div class="rest-bar" id="restBar" style="width:100%"></div></div>
+        <button class="wp-btn-main" style="margin-top:8px" id="skipRest">تخطى الاستراحة</button>
+      </div>
+    </div>
+    <!-- CONTROLS -->
+    <div class="wp-controls">
+      <!-- Timer -->
+      <div class="timer-wrap">
+        <div class="timer-svg-wrap">
+          <svg class="timer-svg" viewBox="0 0 160 160">
+            <circle class="timer-track" cx="80" cy="80" r="68"/>
+            <circle class="timer-prog" id="timerProg" cx="80" cy="80" r="68"
+              stroke-dasharray="427" stroke-dashoffset="0"/>
+          </svg>
+          <div class="timer-display">
+            <span class="timer-num" id="timerNum">00:00</span>
+            <span class="timer-sub" id="timerSub">وقت التمرين</span>
+          </div>
+        </div>
+      </div>
+      <!-- Set tracker -->
+      <div class="set-track">
+        <div class="st-header">
+          <span class="st-title">المجموعات</span>
+          <span class="st-progress" id="stProg">0 / 4</span>
+        </div>
+        <div class="sets-row" id="setsRow"></div>
+      </div>
+      <!-- Rep counter -->
+      <div class="rep-counter">
+        <div class="rc-title">عداد التكرارات</div>
+        <div class="rc-display" id="rcDisplay">0</div>
+        <div class="rc-target" id="rcTarget">الهدف: 12 تكرار</div>
+        <div class="rc-btns">
+          <button class="rc-btn minus" id="rcMinus">−</button>
+          <button class="rc-btn" id="rcReset" style="font-size:.72rem;width:auto;padding:0 12px">reset</button>
+          <button class="rc-btn plus" id="rcPlus">+</button>
+        </div>
+      </div>
+      <!-- Buttons -->
+      <div class="wp-btns">
+        <button class="wp-btn-main" id="wpMainBtn">▶ ابدأ</button>
+        <button class="wp-btn-sec" id="wpSkipSet">التالية ←</button>
+      </div>
+      <button class="wp-btn-sec" id="wpDoneBtn" style="width:100%;text-align:center">✅ أتممت هذا التمرين</button>
+    </div>
+  </div>
+</div>
+
+<!-- DONE OVERLAY -->
+<div class="done-overlay" id="doneOverlay">
+  <div class="confetti-wrap" id="confettiWrap"></div>
+  <div class="done-icon">🏆</div>
+  <div class="done-title">أحسنت!</div>
+  <p style="color:var(--mt);font-size:1rem">أكملت التمرين بنجاح</p>
+  <div class="done-stats" id="doneStats"></div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <button class="wp-btn-main" id="doneClose">متابعة التمرين</button>
+    <button class="wp-btn-sec" id="doneHome" style="padding:14px 20px">العودة للقائمة</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ======= DATA =======
+const EXERCISES = [
+  // CHEST
+  {id:1,name:'Bench Press',nameAr:'بنش بريس — ضغط صدر',muscle:'chest',muscleAr:'الصدر',img:'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:10,rest:90,
+  primary:['الصدر الكبير','الترايسبس'],secondary:['الكتف الأمامي'],
+  desc:'ملك تمارين الصدر وأكثرها فعالية في بناء الكتلة العضلية في الصدر العلوي والسفلي. يُعدّ مقياساً حقيقياً للقوة في صالات الجيم.',
+  tips:['أثبّت لوحي الكتفين للخلف وللأسفل طوال التمرين','أنزل الحديد ببطء 2-3 ثوانٍ ثم ادفع بقوة','القدمان مثبتتان على الأرض، القوس الطبيعي للظهر مهم','المسافة بين اليدين: أعرض من الكتفين بقليل'],
+  phases:['استعد', 'الأسفل', 'أقل نقطة', 'ادفع للأعلى'],
+  phaseCues:['خذ نفساً، أثبت الجسم','أنزل ببطء وتحكم','لمس الصدر، توقف لحظة','ادفع بقوة، ابق الكود مضغوطاً'],
+  figure:'bench'},
+
+  {id:2,name:'Incline DB Press',nameAr:'ضغط دمبل مائل للأعلى',muscle:'chest',muscleAr:'الصدر',img:'https://images.unsplash.com/photo-1534367610401-9f5ed68180aa?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:12,rest:75,
+  primary:['الصدر العلوي'],secondary:['الترايسبس','الكتف الأمامي'],
+  desc:'يستهدف الجزء العلوي من الصدر الذي يُهمله كثيرون. المائل بين 30-45 درجة يعطي أفضل تحفيز للصدر العلوي دون إجهاد الكتف.',
+  tips:['الميل 30-45 درجة فقط، أكثر من 45 يحمّل الكتف','لا ترفع الدمبلز عالياً فوق الوجه، فوق الصدر مباشرة','المرفقان بزاوية 75 درجة من الجسم','اجمع الدمبلزين في الأعلى لتحقيق أقصى انقباض'],
+  phases:['استعد','الأسفل','أقل نقطة','ادفع'],
+  phaseCues:['أمسك بالدمبلز بقوة، كتفيك ثابتتان','افتح المرفقين ببطء مع الإنزال','الدمبل بجانب الصدر','ادفع للأعلى وداخلاً قليلاً'],
+  figure:'dumbbell'},
+
+  {id:3,name:'Cable Flye',nameAr:'فلاي كيبل — تمدد الصدر',muscle:'chest',muscleAr:'الصدر',img:'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&q=80&auto=format&fit=crop',level:'int',levelAr:'متوسط',sets:3,reps:15,rest:60,
+  primary:['الصدر الكبير'],secondary:['الكتف الأمامي'],
+  desc:'تمرين عزل مثالي يحافظ على الضغط على الصدر طوال المدى الكامل للحركة، مما يُنتج ضخاً أفضل وتعريفاً أوضح مقارنة بالدمبل فلاي.',
+  tips:['تخيل أنك تحضن شجرة كبيرة','المرفق منحنٍ ثابت طوال الحركة','تحكم في العودة، لا تترك الكيبل يشدك للخلف','اجمع يديك في المنتصف وضغط لمدة ثانية'],
+  phases:['استعد','افتح','أوسع نقطة','اجمع'],
+  phaseCues:['قف في المنتصف، كيبل في مستوى الكتف','افتح الذراعين ببطء للخارج','اشعر بشد الصدر','اجمع بقوة وضغط في المنتصف'],
+  figure:'cable'},
+
+  // BACK
+  {id:4,name:'Deadlift',nameAr:'ديدليفت — رفع الميت',muscle:'back',muscleAr:'الظهر',img:'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?w=800&q=80&auto=format&fit=crop',level:'adv',levelAr:'متقدم',sets:4,reps:5,rest:120,
+  primary:['الظهر الكبير','المنطقة الوسطى','الهامسترينج'],secondary:['الكواد','الأرداف','الساعد'],
+  desc:'الملك الأول للتمارين المركبة. يستهدف أكثر من 70% من عضلات الجسم في حركة واحدة. يبني القوة الحقيقية ويحفز إفراز هرمون النمو.',
+  tips:['الظهر مستقيم دائماً، لا تحني الظهر أبداً','الحديد قريب جداً من الجسم طوال الحركة','ابدأ الحركة من الأعقاب ليس من الظهر','خذ نفساً عميقاً وأثبت الكور قبل الرفع'],
+  phases:['الإعداد','ابدأ الرفع','منتصف الطريق','الذروة','الإنزال'],
+  phaseCues:['القدمان على عرض الورك، الظهر مستقيم','ادفع الأرض من تحتك','الحديد يمر بجانب الركبتين','الجسم منتصب كالسهم','أنزل ببطء بنفس المسار'],
+  figure:'deadlift'},
+
+  {id:5,name:'Pull-Up',nameAr:'عقلة — سحب للأعلى',muscle:'back',muscleAr:'الظهر',img:'https://images.unsplash.com/photo-1576678927484-cc907957088c?w=800&q=80&auto=format&fit=crop',level:'int',levelAr:'متوسط',sets:4,reps:8,rest:90,
+  primary:['العضلة العريضة للظهر','العضلة المنشارية'],secondary:['البايسبس','الكتف الخلفي'],
+  desc:'معيار القوة النسبية الحقيقية. يبني الظهر العريض ويعطي شكل V الرياضي المميز. لا توجد بديل يعطي نفس الفعالية في بناء عرض الظهر.',
+  tips:['مسافة يدين أعرض من الكتفين لتركيز أكثر على الظهر','لا تتأرجح، الحركة نظيفة ومتحكمة','ابدأ من وضع مد كامل، لا تختصر المدى','أنزل ببطء كامل لتعظيم الفائدة'],
+  phases:['الشنق الكامل','ابدأ السحب','منتصف الطريق','أعلى نقطة','الإنزال البطيء'],
+  phaseCues:['الجسم مستقيم، كتفيك نازلتان','ابدأ بشد لوحي الكتفين','المرفقان ينزلان للأسفل','الذقن فوق البار','أنزل ببطء مع التحكم الكامل'],
+  figure:'pullup'},
+
+  {id:6,name:'Cable Row',nameAr:'سحب كيبل — ظهر أوسط',muscle:'back',muscleAr:'الظهر',img:'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:12,rest:75,
+  primary:['الظهر الأوسط','المعين'],secondary:['الظهر العريض','البايسبس'],
+  desc:'يستهدف عضلات الظهر الأوسط بشكل مثالي مع الحفاظ على وضعية آمنة. ممتاز لبناء سمك الظهر وتحسين الوضعية.',
+  tips:['اجلس منتصباً، لا تتحرك للخلف للمساعدة','اسحب نحو السرة، ليس نحو الصدر','في نهاية الحركة اضغط لوحي الكتفين معاً','أعد ببطء لتعظيم مدى الحركة'],
+  phases:['الوضع الأولي','ابدأ السحب','منتصف الطريق','الضغط الكامل','العودة'],
+  phaseCues:['الجلسة منتصبة، مسك متوسط','ابدأ بتقريب لوحي الكتفين','المرفقان يمران بجانب الجسم','اضغط الظهر بشدة لثانية','أعد للأمام ببطء مع تمدد'],
+  figure:'row'},
+
+  // LEGS
+  {id:7,name:'Squat',nameAr:'سكوات — ضغط الأرجل',muscle:'legs',muscleAr:'الأرجل',img:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:5,reps:8,rest:120,
+  primary:['الكواد','الأرداف'],secondary:['الهامسترينج','الظهر السفلي','الساق'],
+  desc:'ملك التمارين بلا منازع. يعمل على معظم عضلات الجسم في حركة واحدة مركبة. يحفز إفراز التستوستيرون وهرمون النمو بشكل استثنائي.',
+  tips:['القدمان على عرض الكتفين أو أوسع قليلاً','أصابع القدمين للخارج 15-30 درجة','الركبة تتبع اتجاه أصبع القدم دائماً','انزل حتى 90 درجة على الأقل، الفخذ موازٍ للأرض'],
+  phases:['الوقوف','الإنزال','الأدنى','الصعود'],
+  phaseCues:['الحديد على الكتفين، خذ نفساً','أنزل بتحكم كامل 2-3 ثوانٍ','الفخذ موازٍ للأرض أو أسفل','ادفع من الأعقاب، أطرد الهواء'],
+  figure:'squat'},
+
+  {id:8,name:'Romanian Deadlift',nameAr:'ديدليفت روماني — هامسترينج',muscle:'legs',muscleAr:'الأرجل',img:'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800&q=80&auto=format&fit=crop',level:'int',levelAr:'متوسط',sets:4,reps:10,rest:90,
+  primary:['الهامسترينج','الأرداف'],secondary:['الظهر السفلي','العجل'],
+  desc:'أفضل تمرين لبناء الهامسترينج والأرداف. مختلف عن الديدليفت الكلاسيكي — يركز على التمدد والانقباض من الورك وليس الركبة.',
+  tips:['الحركة من الورك وليس من الركبة','اشعر بالشد في الهامسترينج في أسفل الحركة','الحديد قريب من الجسم طوال الوقت','الركبتان منحنيتان قليلاً فقط، ليستا مقفلتين'],
+  phases:['الوقوف','الانحناء','أعمق نقطة','العودة للأعلى'],
+  phaseCues:['قف منتصباً، الحديد أمامك','دفع الورك للخلف، ليس للأسفل','اشعر بشد قوي في الهامسترينج','ادفع الورك للأمام للعودة'],
+  figure:'rdl'},
+
+  {id:9,name:'Leg Press',nameAr:'بريس أرجل',muscle:'legs',muscleAr:'الأرجل',img:'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:15,rest:75,
+  primary:['الكواد'],secondary:['الأرداف','الهامسترينج'],
+  desc:'بديل ممتاز للسكوات لاستهداف الكواد بمقاومة أعلى بدون ضغط على العمود الفقري. يسمح بالتحميل الزائد بأمان.',
+  tips:['لا تثني الركبتين أكثر من 90 درجة','القدمان بمسافة الكتفين في منتصف اللوح','اترك مسافة بسيطة في آخر الدفع، لا تقفل الركبة','وضع القدمين مرتفع = أرداف أكثر، منخفض = كواد أكثر'],
+  phases:['البداية','الإنزال','الأدنى','الدفع'],
+  phaseCues:['الظهر ملامس للمقعد بالكامل','أنزل بتحكم حتى 90 درجة','وقفة قصيرة في الأسفل','ادفع بقوة، أطرد الهواء'],
+  figure:'legpress'},
+
+  // SHOULDERS
+  {id:10,name:'OHP — Overhead Press',nameAr:'ضغط فوق الرأس',muscle:'shoulders',muscleAr:'الأكتاف',img:'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&q=80&auto=format&fit=crop',level:'int',levelAr:'متوسط',sets:4,reps:8,rest:90,
+  primary:['الكتف الأمامي','الكتف الأوسط'],secondary:['الترايسبس','الكور'],
+  desc:'المحرك الأساسي للأكتاف. من أفضل التمارين لبناء الأكتاف الكروية المميزة وإعطاء الجسم عرضاً حقيقياً من الأعلى.',
+  tips:['الكور مشدود دائماً، لا تنحني للخلف','ادفع الحديد للأعلى في خط مستقيم','المرفقان تحت الحديد في وضع البداية','مرر الحديد قريباً من الوجه أثناء الصعود'],
+  phases:['وضع البداية','ارفع للأعلى','منتصف الطريق','أعلى نقطة','الإنزال'],
+  phaseCues:['الحديد على الترقوة، الكور مشدود','ابدأ الدفع بقوة للأعلى','ابقَ عمودياً لا تتأرجح','الذراعان ممدودتان كاملاً','أنزل ببطء للصدر'],
+  figure:'ohp'},
+
+  {id:11,name:'Lateral Raise',nameAr:'رفع جانبي — الأكتاف',muscle:'shoulders',muscleAr:'الأكتاف',img:'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:15,rest:60,
+  primary:['الكتف الأوسط'],secondary:['الكتف الأمامي'],
+  desc:'أفضل تمرين لتوسيع الأكتاف وإعطاء الجسم مظهر V. يستهدف الحزمة الوسطى التي تُعطي الكتفين اتساعهما الحقيقي.',
+  tips:['ارفع حتى مستوى الكتفين فقط، لا تتجاوزهما','المرفق منحنٍ قليلاً 15 درجة طوال الحركة','الإبهام قليلاً للأسفل (كأنك تصب من إبريق)','اخفض ببطء — الحركة النزولية مهمة مثل الصاعدة'],
+  phases:['البداية','الرفع','الذروة','الإنزال البطيء'],
+  phaseCues:['الذراعان على جانبي الجسم','ارفع ببطء وتحكم','لحظة ضغط في أعلى نقطة','أنزل 3 ثوانٍ ببطء'],
+  figure:'lateral'},
+
+  {id:12,name:'Face Pull',nameAr:'فيس بول — كتف خلفي',muscle:'shoulders',muscleAr:'الأكتاف',img:'https://images.unsplash.com/photo-1534367610401-9f5ed68180aa?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:3,reps:20,rest:45,
+  primary:['الكتف الخلفي','المعين'],secondary:['المنشارية'],
+  desc:'التمرين الأكثر إهمالاً والأكثر أهمية لصحة الكتف على المدى البعيد. يقوي الكاف الخلفي ويمنع إصابات الكتف الشائعة.',
+  tips:['الكيبل في مستوى الأذن أو أعلى قليلاً','اسحب نحو الوجه، ليس نحو الصدر','المرفقان يتحركان للخلف وللخارج','دوّر الكتفين للخارج في نهاية الحركة'],
+  phases:['البداية','السحب','الذروة','العودة'],
+  phaseCues:['الكيبل في مستوى الأذن','اسحب نحو وجهك','المرفقان للخلف والخارج','أعد ببطء مع مقاومة'],
+  figure:'facepull'},
+
+  // ARMS
+  {id:13,name:'Barbell Curl',nameAr:'كيرل بار — بايسبس',muscle:'arms',muscleAr:'الذراعين',img:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:12,rest:60,
+  primary:['البايسبس الرأسان'],secondary:['الساعد الأمامي'],
+  desc:'الكلاسيكي الأول لبناء البايسبس. يستهدف رأسي البايسبس الطويل والقصير لإعطاء الارتفاع والسمك المطلوبين.',
+  tips:['المرفقان ثابتان على جانبي الجسم دائماً','لا تتأرجح الجسم للمساعدة','تحكم كامل في الحركة صعوداً وهبوطاً','الإمساك بعرض الكتفين لأفضل تنشيط'],
+  phases:['البداية','الرفع','الذروة','الإنزال البطيء'],
+  phaseCues:['الذراعان ممدودتان، الكور ثابت','ثنِ المرفق بتحكم','اضغط البايسبس في أعلى نقطة','أنزل 3 ثوانٍ ببطء كامل'],
+  figure:'curl'},
+
+  {id:14,name:'Tricep Pushdown',nameAr:'بوش داون — ترايسبس',muscle:'arms',muscleAr:'الذراعين',img:'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:12,rest:60,
+  primary:['الترايسبس الرأس الطويل','الترايسبس الجانبي'],secondary:['الساعد الخلفي'],
+  desc:'يستهدف الترايسبس بشكل مثالي مع ثبات الوضعية. التراي سبس يشكل 65% من حجم الذراع، لذا هو أهم من البايسبس لحجم الذراع الكلي.',
+  tips:['المرفقان ثابتان على جانبي الجسم دائماً','الجزء العلوي من الذراع لا يتحرك أبداً','مدّ الذراعين كاملاً في أسفل الحركة','تحكم في العودة للأعلى، لا تترك الوزن يرجعك'],
+  phases:['البداية','الدفع للأسفل','الامتداد الكامل','العودة'],
+  phaseCues:['المرفقان على الجانبين','ادفع للأسفل بالترايسبس','اضغط الترايسبس في الأسفل','أعد ببطء مع مقاومة'],
+  figure:'pushdown'},
+
+  {id:15,name:'Hammer Curl',nameAr:'هامر كيرل',muscle:'arms',muscleAr:'الذراعين',img:'https://images.unsplash.com/photo-1576678927484-cc907957088c?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:3,reps:12,rest:60,
+  primary:['Brachialis','Brachioradialis'],secondary:['البايسبس'],
+  desc:'يستهدف الـ Brachialis الذي يقع تحت البايسبس ويدفعه للأعلى عند نموه. يبني سماكة الذراع من الجانب ويحسن الساعد.',
+  tips:['الإبهام للأعلى طوال الحركة','حركة متناوبة أو مزدوجة، كلاهما صحيح','المرفقان ثابتان على الجسم','الحركة بطيئة ومتحكمة في الاتجاهين'],
+  phases:['البداية','الرفع','الذروة','الإنزال'],
+  phaseCues:['الدمبل بجانب الجسم، الإبهام للأعلى','ارفع بتحكم نحو الكتف','اضغط في أعلى نقطة','أنزل ببطء كامل'],
+  figure:'hammer'},
+
+  // CORE
+  {id:16,name:'Plank',nameAr:'بلانك — ثبات الكور',muscle:'core',muscleAr:'Core',img:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:0,rest:45,time:60,
+  primary:['العضلة المستعرضة للبطن','العضلة المستقيمة'],secondary:['الظهر السفلي','الأكتاف'],
+  desc:'الأساس الذي تبنى عليه كل التمارين. يقوي الكور الكامل من جميع الجهات مما يحسن الأداء في كل التمارين المركبة ويحمي العمود الفقري.',
+  tips:['الجسم خط مستقيم من الرأس للعقب دائماً','لا ترفع المؤخرة أو تتركها تتدلى','ابتلع السرة نحو العمود الفقري لتنشيط الكور','تنفس بانتظام، لا تحبس الهواء'],
+  phases:['الاستعداد','التثبيت','الإبقاء','الراحة'],
+  phaseCues:['ضع المرفقين تحت الكتفين','ارفع الجسم في خط مستقيم','حافظ على الثبات، تنفس','ضع ركبتيك للراحة'],
+  figure:'plank'},
+
+  {id:17,name:'Cable Crunch',nameAr:'كيبل كرانش — ضغط بطن',muscle:'core',muscleAr:'Core',img:'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80&auto=format&fit=crop',level:'int',levelAr:'متوسط',sets:4,reps:15,rest:60,
+  primary:['العضلة المستقيمة','الكور العلوي'],secondary:['الكور السفلي','المائلة'],
+  desc:'يستخدم الكيبل لتوفير مقاومة ثابتة طوال مدى الحركة الكامل، مما يجعله أفضل من الكرانش العادي لبناء عضلات البطن.',
+  tips:['الحركة من الكور وليس من الرقبة','اضغط البطن بشدة في نهاية الحركة','المرفقان على جانبي الرأس ثابتان','الورك ثابت، فقط الجزء العلوي يتحرك'],
+  phases:['الوضع الأولي','الضغط','أقل نقطة','العودة'],
+  phaseCues:['الركوع، الكيبل خلف الرأس','ثنِ الجذع نحو الأسفل','اضغط البطن بشدة','أعد ببطء مع مقاومة'],
+  figure:'crunch'},
+
+  {id:18,name:'Russian Twist',nameAr:'روسي تويست — خصر',muscle:'core',muscleAr:'Core',img:'https://images.unsplash.com/photo-1534367610401-9f5ed68180aa?w=800&q=80&auto=format&fit=crop',level:'beg',levelAr:'مبتدئ',sets:4,reps:20,rest:45,
+  primary:['المائلة الخارجية','المائلة الداخلية'],secondary:['العضلة المستقيمة','الكور العلوي'],
+  desc:'يستهدف العضلات الجانبية (Obliques) التي تُضيّق الخصر وتُوجد الشكل V المميز. فعّال جداً في تعريف منطقة الخصر.',
+  tips:['ارفع قدميك عن الأرض للتصعيب','الدوران من الخصر وليس من الكتفين','إمساك ثقل لزيادة الصعوبة','حافظ على الظهر مستقيماً بزاوية 45 درجة'],
+  phases:['الاستعداد','الدوران اليسار','الوسط','الدوران اليمين'],
+  phaseCues:['اجلس بزاوية 45°، ارفع القدمين','دوّر الجذع لليسار كاملاً','وسط، حافظ على الثبات','دوّر لليمين بنفس القوة'],
+  figure:'twist'}
+];
+
+// ======= STATE =======
+const state = {
+  completed: new Set(JSON.parse(localStorage.getItem('bg_completed')||'[]')),
+  xp: +localStorage.getItem('bg_xp')||0,
+  streak: +localStorage.getItem('bg_streak')||0,
+  lastDate: localStorage.getItem('bg_lastDate')||'',
+  achievements: JSON.parse(localStorage.getItem('bg_ach')||'{}'),
+  filter:'all', search:'', currentEx:null,
+  // workout player state
+  wp:{active:false, set:1, totalSets:4, reps:0, targetReps:12,
+      elapsed:0, timer:null, phase:0, restTimer:null, restSec:60, isResting:false, isPaused:true}
+};
+
+function saveState(){
+  localStorage.setItem('bg_completed', JSON.stringify([...state.completed]));
+  localStorage.setItem('bg_xp', state.xp);
+  localStorage.setItem('bg_streak', state.streak);
+  localStorage.setItem('bg_lastDate', state.lastDate);
+  localStorage.setItem('bg_ach', JSON.stringify(state.achievements));
+}
+
+// ======= ACHIEVEMENTS =======
+const ACHIEVEMENTS = [
+  {id:'first', icon:'🎯', name:'الخطوة الأولى', desc:'أتمم أول تمرين', cond:()=>state.completed.size>=1},
+  {id:'five',  icon:'🔥', name:'على النار', desc:'أتمم 5 تمارين', cond:()=>state.completed.size>=5},
+  {id:'ten',   icon:'💪', name:'محترف', desc:'أتمم 10 تمارين', cond:()=>state.completed.size>=10},
+  {id:'all',   icon:'🏆', name:'أسطورة', desc:'أتمم كل التمارين', cond:()=>state.completed.size>=18},
+  {id:'streak3',icon:'🌟', name:'3 أيام متتالية', desc:'3 أيام تمرين متتالية', cond:()=>state.streak>=3},
+  {id:'xp500', icon:'⚡', name:'جامع النقاط', desc:'اكسب 500 XP', cond:()=>state.xp>=500},
+];
+
+function checkAchievements(){
+  ACHIEVEMENTS.forEach(a=>{
+    if(!state.achievements[a.id] && a.cond()){
+      state.achievements[a.id] = true;
+      saveState();
+      showToast(`🏆 إنجاز جديد: ${a.name}!`);
+    }
+  });
+  renderAchievements();
+}
+
+function renderAchievements(){
+  const el = document.getElementById('achList');
+  if(!el) return;
+  el.innerHTML = ACHIEVEMENTS.map(a=>`
+    <div class="ach-item ${state.achievements[a.id]?'unlocked':''}">
+      <span class="ach-ic">${a.icon}</span>
+      <div class="ach-info"><strong>${a.name}</strong><small>${a.desc}</small></div>
+      <span class="ach-lock">${state.achievements[a.id]?'✓':'🔒'}</span>
+    </div>`).join('');
+}
+
+// ======= STREAK =======
+function updateStreak(){
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now()-86400000).toDateString();
+  if(state.lastDate === today) return;
+  if(state.lastDate === yesterday) state.streak++;
+  else state.streak = 1;
+  state.lastDate = today;
+  saveState();
+}
+
+function renderStreak(){
+  document.getElementById('streakNum').textContent = state.streak;
+  const days = document.getElementById('streakDays');
+  if(!days) return;
+  const dayNames = ['S','M','T','W','T','F','S'];
+  const today = new Date().getDay();
+  days.innerHTML = dayNames.map((_,i)=>{
+    const isPast = i < today;
+    const isToday = i === today;
+    return `<div class="sd ${isToday?'today':isPast?'done':''}">${dayNames[i]}</div>`;
+  }).join('');
+}
+
+// ======= XP SYSTEM =======
+function addXP(amount){
+  state.xp += amount;
+  saveState();
+  updateXPUI();
+}
+
+function updateXPUI(){
+  const level = Math.floor(state.xp/100)+1;
+  const xpInLevel = state.xp % 100;
+  document.getElementById('lvlBadge').textContent = `المستوى ${level}`;
+  document.getElementById('xpBar').style.width = xpInLevel+'%';
+  document.getElementById('xpLbl').textContent = `${state.xp} XP إجمالي`;
+}
+
+// ======= RENDER EXERCISES =======
+function getFiltered(){
+  let list = EXERCISES;
+  if(state.filter !== 'all') list = list.filter(e=>e.muscle===state.filter);
+  if(state.search) {
+    const q = state.search.toLowerCase();
+    list = list.filter(e=>e.nameAr.toLowerCase().includes(q)||e.name.toLowerCase().includes(q)||e.muscleAr.includes(q));
+  }
+  return list;
+}
+
+function renderGrid(){
+  const list = getFiltered();
+  const grid = document.getElementById('exGrid');
+  document.getElementById('exCount').textContent = list.length+' تمرين';
+  grid.innerHTML = list.map(ex=>`
+    <div class="ex-card ${state.completed.has(ex.id)?'completed':''}" data-id="${ex.id}">
+      <div class="card-img">
+        <img src="${ex.img}" alt="${ex.nameAr}" loading="lazy"/>
+        <div class="card-badges">
+          <span class="badge-muscle">${ex.muscleAr}</span>
+          <span class="badge-level ${ex.level}">${ex.levelAr}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${ex.nameAr}</div>
+        <div class="card-muscle-ar">${ex.primary.join(' · ')}</div>
+        <div class="card-desc">${ex.desc}</div>
+        <div class="card-meta">
+          <span class="cm-item">🔢 ${ex.reps?ex.reps+' تكرار':ex.time+'ث'}</span>
+          <span class="cm-item">📦 ${ex.sets} مجموعات</span>
+          <span class="cm-item">⏱ ${ex.rest}ث راحة</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn-start" onclick="openPlayer(${ex.id})">▶ ابدأ التمرين</button>
+          <button class="btn-info" onclick="openModal(${ex.id})">ℹ</button>
+        </div>
+      </div>
+    </div>`).join('');
+  updateProgressStrip();
+}
+
+// ======= PROGRESS STRIP =======
+function updateProgressStrip(){
+  const total = EXERCISES.length;
+  const done = state.completed.size;
+  const pct = total ? (done/total*100) : 0;
+  document.getElementById('psBar').style.width = pct+'%';
+  document.getElementById('psCount').textContent = done+' / '+total;
+  document.getElementById('psXp').textContent = state.xp+' XP مكتسب';
+}
+
+// ======= FILTER / SEARCH =======
+document.getElementById('filterList').addEventListener('click', e=>{
+  const btn = e.target.closest('.fl-btn');
+  if(!btn) return;
+  document.querySelectorAll('.fl-btn').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  state.filter = btn.dataset.f;
+  renderGrid();
+});
+
+document.getElementById('searchInput').addEventListener('input', e=>{
+  state.search = e.target.value;
+  renderGrid();
+});
+
+// ======= SVG FIGURES =======
+function getFigureSVG(type, phase=0){
+  const figs = {
+    bench: [
+      `<g><!-- bench setup -->
+        <rect x="60" y="180" width="80" height="12" rx="4" fill="#2a3040"/>
+        <rect x="55" y="192" width="6" height="50" rx="3" fill="#2a3040"/>
+        <rect x="139" y="192" width="6" height="50" rx="3" fill="#2a3040"/>
+        <!-- person lying -->
+        <ellipse cx="100" cy="175" rx="14" ry="14" fill="#e63946"/>
+        <rect x="70" y="175" width="60" height="18" rx="5" fill="#e63946"/>
+        <!-- arms up -->
+        <line x1="70" y1="180" x2="50" y2="${150+phase*15}" stroke="#e63946" stroke-width="6" stroke-linecap="round"/>
+        <line x1="130" y1="180" x2="150" y2="${150+phase*15}" stroke="#e63946" stroke-width="6" stroke-linecap="round"/>
+        <!-- barbell -->
+        <rect x="30" y="${142+phase*15}" width="140" height="8" rx="4" fill="#aab"/>
+        <rect x="22" y="${138+phase*15}" width="16" height="16" rx="3" fill="#778"/>
+        <rect x="162" y="${138+phase*15}" width="16" height="16" rx="3" fill="#778"/>
+      </g>`,
+      `<g>
+        <rect x="60" y="180" width="80" height="12" rx="4" fill="#2a3040"/>
+        <rect x="55" y="192" width="6" height="50" rx="3" fill="#2a3040"/>
+        <rect x="139" y="192" width="6" height="50" rx="3" fill="#2a3040"/>
+        <ellipse cx="100" cy="175" rx="14" ry="14" fill="#e63946"/>
+        <rect x="70" y="175" width="60" height="18" rx="5" fill="#e63946"/>
+        <line x1="70" y1="180" x2="55" y2="172" stroke="#e63946" stroke-width="6" stroke-linecap="round"/>
+        <line x1="130" y1="180" x2="145" y2="172" stroke="#e63946" stroke-width="6" stroke-linecap="round"/>
+        <rect x="30" y="162" width="140" height="8" rx="4" fill="#aab"/>
+        <rect x="22" y="158" width="16" height="16" rx="3" fill="#778"/>
+        <rect x="162" y="158" width="16" height="16" rx="3" fill="#778"/>
+      </g>`,
+    ],
+    squat: [
+      `<g><!-- standing squat -->
+        <ellipse cx="100" cy="40" rx="20" ry="20" fill="#e63946"/>
+        <rect x="80" y="58" width="40" height="55" rx="6" fill="#e63946"/>
+        <!-- legs standing -->
+        <rect x="82" y="113" width="16" height="70" rx="5" fill="#e63946"/>
+        <rect x="102" y="113" width="16" height="70" rx="5" fill="#e63946"/>
+        <rect x="80" y="183" width="20" height="10" rx="3" fill="#4361ee"/>
+        <rect x="100" y="183" width="20" height="10" rx="3" fill="#4361ee"/>
+        <!-- barbell on shoulders -->
+        <rect x="30" y="65" width="140" height="8" rx="4" fill="#aab"/>
+        <rect x="22" y="60" width="14" height="16" rx="3" fill="#778"/>
+        <rect x="164" y="60" width="14" height="16" rx="3" fill="#778"/>
+      </g>`,
+      `<g><!-- squat down -->
+        <ellipse cx="100" cy="80" rx="20" ry="20" fill="#e63946"/>
+        <rect x="80" y="98" width="40" height="40" rx="6" fill="#e63946"/>
+        <!-- legs bent -->
+        <line x1="86" y1="138" x2="70" y2="190" stroke="#e63946" stroke-width="14" stroke-linecap="round"/>
+        <line x1="114" y1="138" x2="130" y2="190" stroke="#e63946" stroke-width="14" stroke-linecap="round"/>
+        <line x1="70" y1="190" x2="65" y2="210" stroke="#e63946" stroke-width="12" stroke-linecap="round"/>
+        <line x1="130" y1="190" x2="135" y2="210" stroke="#e63946" stroke-width="12" stroke-linecap="round"/>
+        <rect x="55" y="210" width="22" height="10" rx="3" fill="#4361ee"/>
+        <rect x="123" y="210" width="22" height="10" rx="3" fill="#4361ee"/>
+        <!-- barbell -->
+        <rect x="30" y="105" width="140" height="8" rx="4" fill="#aab"/>
+        <rect x="22" y="100" width="14" height="16" rx="3" fill="#778"/>
+        <rect x="164" y="100" width="14" height="16" rx="3" fill="#778"/>
+      </g>`,
+    ],
+    deadlift: [
+      `<g><!-- bent for deadlift -->
+        <ellipse cx="100" cy="90" rx="20" ry="20" fill="#e63946"/>
+        <line x1="100" y1="108" x2="100" y2="175" stroke="#e63946" stroke-width="16" stroke-linecap="round"/>
+        <line x1="100" y1="138" x2="72" y2="205" stroke="#e63946" stroke-width="14" stroke-linecap="round"/>
+        <line x1="100" y1="138" x2="128" y2="205" stroke="#e63946" stroke-width="14" stroke-linecap="round"/>
+        <line x1="72" y1="205" x2="68" y2="230" stroke="#e63946" stroke-width="12" stroke-linecap="round"/>
+        <line x1="128" y1="205" x2="132" y2="230" stroke="#e63946" stroke-width="12" stroke-linecap="round"/>
+        <rect x="55" y="230" width="22" height="10" rx="3" fill="#4361ee"/>
+        <rect x="123" y="230" width="22" height="10" rx="3" fill="#4361ee"/>
+        <!-- arms down to bar -->
+        <line x1="84" y1="125" x2="70" y2="205" stroke="#4361ee" stroke-width="8" stroke-linecap="round"/>
+        <line x1="116" y1="125" x2="130" y2="205" stroke="#4361ee" stroke-width="8" stroke-linecap="round"/>
+        <!-- barbell on floor -->
+        <rect x="30" y="220" width="140" height="8" rx="4" fill="#aab"/>
+        <rect x="18" y="205" width="22" height="24" rx="4" fill="#778"/>
+        <rect x="160" y="205" width="22" height="24" rx="4" fill="#778"/>
+      </g>`,
+      `<g><!-- standing deadlift -->
+        <ellipse cx="100" cy="40" rx="20" ry="20" fill="#e63946"/>
+        <line x1="100" y1="58" x2="100" y2="165" stroke="#e63946" stroke-width="16" stroke-linecap="round"/>
+        <line x1="100" y1="140" x2="82" y2="210" stroke="#e63946" stroke-width="14" stroke-linecap="round"/>
+        <line x1="100" y1="140" x2="118" y2="210" stroke="#e63946" stroke-width="14" stroke-linecap="round"/>
+        <line x1="82" y1="210" x2="80" y2="240" stroke="#e63946" stroke-width="12" stroke-linecap="round"/>
+        <line x1="118" y1="210" x2="120" y2="240" stroke="#e63946" stroke-width="12" stroke-linecap="round"/>
+        <rect x="66" y="240" width="22" height="10" rx="3" fill="#4361ee"/>
+        <rect x="112" y="240" width="22" height="10" rx="3" fill="#4361ee"/>
+        <line x1="85" y1="100" x2="78" y2="180" stroke="#4361ee" stroke-width="8" stroke-linecap="round"/>
+        <line x1="115" y1="100" x2="122" y2="180" stroke="#4361ee" stroke-width="8" stroke-linecap="round"/>
+        <rect x="30" y="172" width="140" height="8" rx="4" fill="#aab"/>
+        <rect x="18" y="158" width="22" height="24" rx="4" fill="#778"/>
+        <rect x="160" y="158" width="22" height="24" rx="4" fill="#778"/>
+      </g>`,
+    ],
+    pullup: [
+      `<g><!-- hanging pull up -->
+        <!-- bar -->
+        <rect x="20" y="30" width="160" height="10" rx="5" fill="#778"/>
+        <ellipse cx="100" cy="70" rx="20" ry="20" fill="#e63946"/>
+        <!-- arms up to bar -->
+        <line x1="88" y1="55" x2="70" y2="35" stroke="#e63946" stroke-width="8" stroke-linecap="round"/>
+        <line x1="112" y1="55" x2="130" y2="35" stroke="#e63946" stroke-width="8" stroke-linecap="round"/>
+        <!-- body hanging -->
+        <rect x="85" y="88" width="30" height="65" rx="6" fill="#e63946"/>
+        <line x1="93" y1="153" x2="88" y2="230" stroke="#e63946" stroke-width="13" stroke-linecap="round"/>
+        <line x1="107" y1="153" x2="112" y2="230" stroke="#e63946" stroke-width="13" stroke-linecap="round"/>
+        <rect x="76" y="230" width="22" height="10" rx="3" fill="#4361ee"/>
+        <rect x="102" y="230" width="22" height="10" rx="3" fill="#4361ee"/>
+      </g>`,
+      `<g><!-- at top pull up -->
+        <rect x="20" y="30" width="160" height="10" rx="5" fill="#778"/>
+        <ellipse cx="100" cy="55" rx="20" ry="20" fill="#e63946"/>
+        <line x1="88" y1="42" x2="72" y2="35" stroke="#e63946" stroke-width="8" stroke-linecap="round"/>
+        <line x1="112" y1="42" x2="128" y2="35" stroke="#e63946" stroke-width="8" stroke-linecap="round"/>
+        <rect x="85" y="73" width="30" height="55" rx="6" fill="#e63946"/>
+        <line x1="93" y1="128" x2="86" y2="195" stroke="#e63946" stroke-width="13" stroke-linecap="round"/>
+        <line x1="107" y1="128" x2="114" y2="195" stroke="#e63946" stroke-width="13" stroke-linecap="round"/>
+        <rect x="74" y="195" width="22" height="10" rx="3" fill="#4361ee"/>
+        <rect x="104" y="195" width="22" height="10" rx="3" fill="#4361ee"/>
+      </g>`,
+    ],
+    curl: [
+      `<g><!-- arm curl down -->
+        <ellipse cx="100" cy="40" rx="20" ry="20" fill="#e63946"/>
+        <rect x="85" y="58" width="30" height="75" rx="6" fill="#e63946"/>
+        <!-- arms down -->
+        <line x1="87" y1="100" x2="72" y2="185" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <line x1="113" y1="100" x2="128" y2="185" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <!-- barbell at bottom -->
+        <rect x="48" y="182" width="104" height="8" rx="4" fill="#aab"/>
+        <rect x="40" y="178" width="14" height="16" rx="3" fill="#778"/>
+        <rect x="146" y="178" width="14" height="16" rx="3" fill="#778"/>
+        <!-- legs -->
+        <rect x="88" y="133" width="12" height="70" rx="5" fill="#e63946"/>
+        <rect x="100" y="133" width="12" height="70" rx="5" fill="#e63946"/>
+        <rect x="84" y="200" width="20" height="10" rx="3" fill="#4361ee"/>
+        <rect x="96" y="200" width="20" height="10" rx="3" fill="#4361ee"/>
+      </g>`,
+      `<g><!-- arm curl up -->
+        <ellipse cx="100" cy="40" rx="20" ry="20" fill="#e63946"/>
+        <rect x="85" y="58" width="30" height="75" rx="6" fill="#e63946"/>
+        <!-- arms bent up -->
+        <line x1="87" y1="100" x2="60" y2="140" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <line x1="113" y1="100" x2="140" y2="140" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <line x1="60" y1="140" x2="58" y2="95" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <line x1="140" y1="140" x2="142" y2="95" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <!-- barbell high -->
+        <rect x="34" y="88" width="132" height="8" rx="4" fill="#aab"/>
+        <rect x="26" y="84" width="14" height="16" rx="3" fill="#778"/>
+        <rect x="160" y="84" width="14" height="16" rx="3" fill="#778"/>
+        <!-- legs -->
+        <rect x="88" y="133" width="12" height="70" rx="5" fill="#e63946"/>
+        <rect x="100" y="133" width="12" height="70" rx="5" fill="#e63946"/>
+        <rect x="84" y="200" width="20" height="10" rx="3" fill="#4361ee"/>
+        <rect x="96" y="200" width="20" height="10" rx="3" fill="#4361ee"/>
+      </g>`,
+    ],
+    plank: [
+      `<g><!-- plank position -->
+        <ellipse cx="40" cy="130" rx="15" ry="15" fill="#e63946"/>
+        <!-- body straight -->
+        <rect x="35" y="142" width="130" height="16" rx="5" fill="#e63946" transform="rotate(-8 35 142)"/>
+        <!-- forearms -->
+        <rect x="28" y="155" width="10" height="40" rx="4" fill="#4361ee"/>
+        <rect x="48" y="155" width="10" height="40" rx="4" fill="#4361ee"/>
+        <!-- feet -->
+        <rect x="148" y="162" width="22" height="10" rx="3" fill="#4361ee"/>
+        <!-- floor line -->
+        <line x1="10" y1="195" x2="190" y2="195" stroke="#2a3040" stroke-width="3"/>
+      </g>`,
+    ],
+    ohp: [
+      `<g><!-- OHP down -->
+        <ellipse cx="100" cy="40" rx="20" ry="20" fill="#e63946"/>
+        <rect x="85" y="58" width="30" height="70" rx="6" fill="#e63946"/>
+        <rect x="88" y="128" width="12" height="70" rx="5" fill="#e63946"/>
+        <rect x="100" y="128" width="12" height="70" rx="5" fill="#e63946"/>
+        <rect x="84" y="196" width="20" height="10" rx="3" fill="#4361ee"/>
+        <rect x="96" y="196" width="20" height="10" rx="3" fill="#4361ee"/>
+        <!-- arms at shoulder -->
+        <line x1="87" y1="90" x2="48" y2="80" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <line x1="113" y1="90" x2="152" y2="80" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <!-- bar at chest -->
+        <rect x="25" y="73" width="150" height="8" rx="4" fill="#aab"/>
+        <rect x="17" y="68" width="14" height="16" rx="3" fill="#778"/>
+        <rect x="169" y="68" width="14" height="16" rx="3" fill="#778"/>
+      </g>`,
+      `<g><!-- OHP overhead -->
+        <ellipse cx="100" cy="55" rx="20" ry="20" fill="#e63946"/>
+        <rect x="85" y="73" width="30" height="65" rx="6" fill="#e63946"/>
+        <rect x="88" y="138" width="12" height="70" rx="5" fill="#e63946"/>
+        <rect x="100" y="138" width="12" height="70" rx="5" fill="#e63946"/>
+        <rect x="84" y="206" width="20" height="10" rx="3" fill="#4361ee"/>
+        <rect x="96" y="206" width="20" height="10" rx="3" fill="#4361ee"/>
+        <!-- arms overhead -->
+        <line x1="87" y1="85" x2="75" y2="30" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <line x1="113" y1="85" x2="125" y2="30" stroke="#e63946" stroke-width="9" stroke-linecap="round"/>
+        <!-- bar overhead -->
+        <rect x="40" y="20" width="120" height="8" rx="4" fill="#aab"/>
+        <rect x="32" y="15" width="14" height="16" rx="3" fill="#778"/>
+        <rect x="154" y="15" width="14" height="16" rx="3" fill="#778"/>
+      </g>`,
+    ],
+  };
+  const def = figs.squat;
+  const fig = figs[type] || def;
+  const idx = phase < fig.length ? phase : fig.length-1;
+  return fig[idx];
+}
+
+// ======= MODAL =======
+function openModal(id){
+  const ex = EXERCISES.find(e=>e.id===id);
+  if(!ex) return;
+  state.currentEx = ex;
+  document.getElementById('modalImg').src = ex.img;
+  document.getElementById('modalImg').alt = ex.nameAr;
+  // Phase dots
+  const dots = document.getElementById('phaseDots');
+  dots.innerHTML = ex.phases.map((_,i)=>`<div class="pdot ${i===0?'act':''}" data-i="${i}"></div>`).join('');
+  document.getElementById('phaseName').textContent = ex.phases[0];
+  document.getElementById('phaseCue').textContent = ex.phaseCues[0];
+  // Animate phases on dots
+  let phaseIdx = 0;
+  if(window._phaseInterval) clearInterval(window._phaseInterval);
+  window._phaseInterval = setInterval(()=>{
+    phaseIdx = (phaseIdx+1) % ex.phases.length;
+    dots.querySelectorAll('.pdot').forEach((d,i)=>d.classList.toggle('act',i===phaseIdx));
+    document.getElementById('phaseName').textContent = ex.phases[phaseIdx];
+    document.getElementById('phaseCue').textContent = ex.phaseCues[phaseIdx];
+  }, 1800);
+  // Right panel
+  document.getElementById('modalInfo').innerHTML = `
+    <span class="modal-chip">${ex.muscleAr}</span>
+    <div class="modal-name">${ex.nameAr}</div>
+    <div class="modal-desc">${ex.desc}</div>
+    <div class="modal-badges">
+      <div class="mb"><strong>المجموعات</strong>: ${ex.sets}</div>
+      <div class="mb"><strong>${ex.reps?'التكرارات':'المدة'}</strong>: ${ex.reps?ex.reps:ex.time+'ث'}</div>
+      <div class="mb"><strong>الراحة</strong>: ${ex.rest}ث</div>
+      <div class="mb"><strong>المستوى</strong>: ${ex.levelAr}</div>
+    </div>
+    <div class="muscles-visual">
+      <div class="mv-title">العضلات المستهدفة</div>
+      <div class="muscle-tags">
+        ${ex.primary.map(m=>`<span class="mtag primary">${m}</span>`).join('')}
+        ${ex.secondary.map(m=>`<span class="mtag secondary">${m}</span>`).join('')}
+      </div>
+    </div>
+    <div class="tips-box">
+      <div class="tips-title">نصائح الشكل الصحيح</div>
+      ${ex.tips.map(t=>`<div class="tip-item">${t}</div>`).join('')}
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn-start" style="flex:1" onclick="openPlayer(${ex.id});closeModal()">▶ ابدأ التمرين</button>
+      <button class="btn-info" onclick="closeModal()">✕ إغلاق</button>
+    </div>`;
+  document.getElementById('modalBg').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modalBg').classList.remove('open');
+  document.body.style.overflow='';
+  if(window._phaseInterval) clearInterval(window._phaseInterval);
+}
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalBg').addEventListener('click', e=>{if(e.target===e.currentTarget) closeModal();});
+
+// ======= WORKOUT PLAYER =======
+let animFrame = null;
+
+function openPlayer(id){
+  const ex = EXERCISES.find(e=>e.id===id);
+  if(!ex) return;
+  state.currentEx = ex;
+  state.wp = {active:true,set:1,totalSets:ex.sets,reps:0,targetReps:ex.reps||0,
+    elapsed:0,timer:null,phase:0,restTimer:null,restSec:ex.rest,isResting:false,isPaused:true};
+  document.getElementById('workoutPlayer').classList.add('open');
+  document.getElementById('wpExName').textContent = ex.nameAr;
+  document.getElementById('wpSetIndicator').textContent = '1 / '+ex.sets;
+  document.body.style.overflow='hidden';
+  initSets(ex.sets);
+  updateRepDisplay();
+  document.getElementById('rcTarget').textContent = ex.reps ? 'الهدف: '+ex.reps+' تكرار' : 'مدة: '+ex.time+' ثانية';
+  document.getElementById('wpPhaseLabel').textContent = 'استعد';
+  document.getElementById('wpCue').textContent = 'اضغط ابدأ لتبدأ التمرين';
+  // SVG figure
+  updateFigure(0);
+  resetTimer();
+  closeModal();
+}
+
+function initSets(n){
+  const row = document.getElementById('setsRow');
+  row.innerHTML = Array.from({length:n},(_,i)=>
+    `<div class="set-bubble ${i===0?'current':''}" id="sb${i+1}">${i+1}</div>`).join('');
+  document.getElementById('stProg').textContent = '0 / '+n;
+}
+
+function updateFigure(phaseIdx){
+  const ex = state.currentEx;
+  const fig = document.getElementById('wpFigure');
+  const type = ex.figure || 'squat';
+  fig.innerHTML = getFigureSVG(type, phaseIdx);
+  // animate path color pulse
+  fig.querySelectorAll('g').forEach(g=>{
+    g.style.filter = 'drop-shadow(0 0 8px rgba(230,57,70,0.6))';
+  });
+}
+
+function resetTimer(){
+  clearInterval(state.wp.timer);
+  state.wp.elapsed = 0;
+  state.wp.isPaused = true;
+  document.getElementById('timerNum').textContent = '00:00';
+  const circ = 2*Math.PI*68;
+  document.getElementById('timerProg').style.strokeDashoffset = '0';
+  document.getElementById('wpMainBtn').textContent = '▶ ابدأ';
+}
+
+// Main button
+document.getElementById('wpMainBtn').addEventListener('click', ()=>{
+  if(state.wp.isResting) return;
+  if(state.wp.isPaused){
+    startTimer();
+    document.getElementById('wpMainBtn').textContent = '⏸ إيقاف مؤقت';
+    // animate phases
+    startPhaseAnimation();
+    // breath
+    startBreathAnimation();
+  } else {
+    pauseTimer();
+    document.getElementById('wpMainBtn').textContent = '▶ استمرار';
+    stopPhaseAnimation();
+  }
+});
+
+function startTimer(){
+  state.wp.isPaused = false;
+  const start = Date.now() - state.wp.elapsed*1000;
+  state.wp.timer = setInterval(()=>{
+    state.wp.elapsed = (Date.now()-start)/1000;
+    const m = Math.floor(state.wp.elapsed/60).toString().padStart(2,'0');
+    const s = Math.floor(state.wp.elapsed%60).toString().padStart(2,'0');
+    document.getElementById('timerNum').textContent = m+':'+s;
+    // circle
+    const limit = state.currentEx.time || 60;
+    const fraction = Math.min(state.wp.elapsed/limit,1);
+    const circ = 2*Math.PI*68;
+    document.getElementById('timerProg').style.strokeDashoffset = circ*(1-fraction);
+    // color shift
+    if(fraction>0.75) document.getElementById('timerProg').style.stroke='#4361ee';
+  },200);
+}
+
+function pauseTimer(){ clearInterval(state.wp.timer); state.wp.isPaused=true; }
+
+// Phase animation
+let phaseAnim = null;
+function startPhaseAnimation(){
+  const ex = state.currentEx;
+  let pi = 0;
+  phaseAnim = setInterval(()=>{
+    pi = (pi+1)%ex.phases.length;
+    document.getElementById('wpPhaseLabel').textContent = ex.phases[pi];
+    document.getElementById('wpCue').textContent = ex.phaseCues[pi];
+    updateFigure(pi%2);
+  },1800);
+}
+function stopPhaseAnimation(){ clearInterval(phaseAnim); }
+
+// Breath animation
+let breathAnim = null;
+function startBreathAnimation(){
+  const inner = document.getElementById('breathInner');
+  const ring = document.getElementById('breathRing');
+  let breathOut = false;
+  breathAnim = setInterval(()=>{
+    breathOut = !breathOut;
+    inner.textContent = breathOut ? 'اطرد' : 'خذ';
+    inner.style.transform = breathOut ? 'scale(.7)' : 'scale(1)';
+    ring.style.boxShadow = breathOut
+      ? '0 0 0 0 rgba(67,97,238,0)'
+      : '0 0 0 12px rgba(67,97,238,.15)';
+  },2000);
+}
+
+// Skip set
+document.getElementById('wpSkipSet').addEventListener('click', completeSet);
+
+function completeSet(){
+  stopPhaseAnimation();
+  clearInterval(breathAnim);
+  pauseTimer();
+  const wp = state.wp;
+  if(wp.set >= wp.totalSets){
+    completeExercise();
+    return;
+  }
+  // Mark set done
+  const bubble = document.getElementById('sb'+wp.set);
+  if(bubble){ bubble.classList.remove('current'); bubble.classList.add('done'); }
+  wp.set++;
+  const nextBubble = document.getElementById('sb'+wp.set);
+  if(nextBubble) nextBubble.classList.add('current');
+  document.getElementById('stProg').textContent = (wp.set-1)+' / '+wp.totalSets;
+  document.getElementById('wpSetIndicator').textContent = wp.set+' / '+wp.totalSets;
+  // Reset reps
+  wp.reps=0; updateRepDisplay();
+  resetTimer();
+  // Start rest
+  startRest(wp.restSec);
+}
+
+function startRest(sec){
+  state.wp.isResting = true;
+  const overlay = document.getElementById('restOverlay');
+  overlay.classList.add('show');
+  let remaining = sec;
+  document.getElementById('restNum').textContent = remaining;
+  document.getElementById('restBar').style.width='100%';
+  document.getElementById('wpMainBtn').textContent = '⏳ استراحة...';
+  document.getElementById('wpMainBtn').disabled = true;
+  state.wp.restTimer = setInterval(()=>{
+    remaining--;
+    document.getElementById('restNum').textContent = remaining;
+    document.getElementById('restBar').style.width = (remaining/sec*100)+'%';
+    if(remaining<=0){ endRest(); }
+  },1000);
+}
+
+function endRest(){
+  clearInterval(state.wp.restTimer);
+  state.wp.isResting=false;
+  document.getElementById('restOverlay').classList.remove('show');
+  document.getElementById('wpMainBtn').textContent = '▶ ابدأ المجموعة '+state.wp.set;
+  document.getElementById('wpMainBtn').disabled = false;
+}
+
+document.getElementById('skipRest').addEventListener('click', ()=>{
+  clearInterval(state.wp.restTimer);
+  endRest();
+});
+
+// Rep counter
+document.getElementById('rcPlus').addEventListener('click', ()=>{
+  state.wp.reps++;
+  updateRepDisplay(true);
+});
+document.getElementById('rcMinus').addEventListener('click', ()=>{
+  if(state.wp.reps>0) state.wp.reps--;
+  updateRepDisplay();
+});
+document.getElementById('rcReset').addEventListener('click', ()=>{ state.wp.reps=0; updateRepDisplay(); });
+
+function updateRepDisplay(flash=false){
+  const el = document.getElementById('rcDisplay');
+  el.textContent = state.wp.reps;
+  if(flash){ el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'),300); }
+  // color
+  const t = state.wp.targetReps;
+  if(t && state.wp.reps>=t) el.style.color='#52b788';
+  else if(state.wp.reps>0) el.style.color='var(--r)';
+  else el.style.color='var(--tx)';
+}
+
+// Done button
+document.getElementById('wpDoneBtn').addEventListener('click', completeExercise);
+
+function completeExercise(){
+  stopPhaseAnimation();
+  clearInterval(breathAnim);
+  pauseTimer();
+  clearInterval(state.wp.restTimer);
+  document.getElementById('restOverlay').classList.remove('show');
+  // mark all sets done
+  document.querySelectorAll('.set-bubble').forEach(b=>{ b.classList.remove('current'); b.classList.add('done'); });
+  // Add to completed
+  const ex = state.currentEx;
+  const isNew = !state.completed.has(ex.id);
+  state.completed.add(ex.id);
+  if(isNew){ addXP(50); updateStreak(); }
+  else addXP(20);
+  saveState();
+  checkAchievements();
+  showDoneScreen(ex, isNew);
+}
+
+function showDoneScreen(ex, isNew){
+  const elapsed = Math.floor(state.wp.elapsed);
+  const m = Math.floor(elapsed/60), s = elapsed%60;
+  const repsTotal = state.wp.reps * state.wp.set;
+  const xpEarned = isNew ? 50 : 20;
+  document.getElementById('doneStats').innerHTML = `
+    <div class="ds"><div class="ds-num">${state.wp.set}</div><div class="ds-lbl">مجموعات</div></div>
+    <div class="ds"><div class="ds-num">${repsTotal||'—'}</div><div class="ds-lbl">تكرارات</div></div>
+    <div class="ds"><div class="ds-num">${m>0?m+'د ':''+(s<10?'0'+s:s)+'ث'}</div><div class="ds-lbl">وقت</div></div>
+    <div class="ds"><div class="ds-num">+${xpEarned}</div><div class="ds-lbl">XP مكتسب</div></div>`;
+  document.getElementById('doneOverlay').classList.add('show');
+  createConfetti();
+  renderGrid();
+  updateXPUI();
+}
+
+document.getElementById('doneClose').addEventListener('click', ()=>{
+  document.getElementById('doneOverlay').classList.remove('show');
+});
+document.getElementById('doneHome').addEventListener('click', ()=>{
+  document.getElementById('doneOverlay').classList.remove('show');
+  document.getElementById('workoutPlayer').classList.remove('open');
+  document.body.style.overflow='';
+  renderGrid();
+});
+document.getElementById('wpClose').addEventListener('click', ()=>{
+  stopPhaseAnimation();
+  clearInterval(breathAnim);
+  pauseTimer();
+  clearInterval(state.wp.restTimer);
+  document.getElementById('workoutPlayer').classList.remove('open');
+  document.body.style.overflow='';
+});
+
+// ======= CONFETTI =======
+function createConfetti(){
+  const wrap = document.getElementById('confettiWrap');
+  wrap.innerHTML='';
+  const colors=['#e63946','#4361ee','#4cc9f0','#f4a261','#52b788','#fff'];
+  for(let i=0;i<60;i++){
+    const dot = document.createElement('div');
+    dot.className='conf-dot';
+    const size = 6+Math.random()*10;
+    dot.style.cssText=`
+      width:${size}px;height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      left:${Math.random()*100}%;
+      animation:confettiFall ${1.5+Math.random()*2}s ${Math.random()*0.5}s ease forwards;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+    `;
+    wrap.appendChild(dot);
+  }
+}
+
+// ======= TOAST =======
+function showToast(msg){
+  const t = document.createElement('div');
+  t.style.cssText=`position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--d2);border:1px solid var(--bdr);color:var(--tx);padding:12px 24px;border-radius:10px;font-size:.88rem;font-weight:600;z-index:5000;animation:fadeUp .4s ease;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.5)`;
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+// Scroll progress
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight);
+  document.getElementById('pgbar').style.transform=`scaleX(${pct})`;
+},{passive:true});
+
+// ======= INIT =======
+renderGrid();
+renderStreak();
+renderAchievements();
+updateXPUI();
+updateProgressStrip();
+</script>
+</body>
+</html>
